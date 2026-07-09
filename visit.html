@@ -207,12 +207,12 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   /* === Google Sheet tab gids — set these after creating the tabs === */
-  var HOURS_GID = null;  /* <- Hours tab gid */
-  var FAQ_GID   = null;  /* <- FAQ tab gid   */
+  var HOURS_GID = null;        /* <- Hours tab gid (set when ready) */
+  var FAQ_GID   = 1629458348;  /* FAQs tab */
 
   /* Hours: replace the static table on success; the static rows remain a fallback */
   if (HOURS_GID != null && window.MeanderSheet) {
-    MeanderSheet.fetchTab(HOURS_GID).then(function (rows) {
+    MeanderSheet.fetchTab(HOURS_GID, 'Day').then(function (rows) {
       var table = document.getElementById('hours-table');
       if (!table) return;
       var html = '';
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
   /* FAQ: reveal + populate the section on success; stay hidden otherwise */
   var faqSection = document.getElementById('faq-section');
   if (FAQ_GID != null && window.MeanderSheet) {
-    MeanderSheet.fetchTab(FAQ_GID).then(function (rows) {
+    MeanderSheet.fetchTab(FAQ_GID, 'Question').then(function (rows) {
       var list = document.getElementById('faq-list');
       var items = rows.filter(function (r) { return (r.Question || r.question || '').trim(); });
       if (!list || !items.length) return;

@@ -22,11 +22,21 @@
     return result;
   }
 
-  function parseCSV(text) {
+  function parseCSV(text, headerHint) {
     var lines = text.trim().split('\n');
     if (!lines.length) return [];
-    var headers = parseCSVLine(lines[0]);
-    return lines.slice(1).map(function (line) {
+    // Some tabs have a leading title row (e.g. "FAQs,,") above the real headers.
+    // If a headerHint column name is given, skip down to the row that contains it.
+    var start = 0;
+    if (headerHint) {
+      var hint = headerHint.trim().toLowerCase();
+      for (var k = 0; k < lines.length; k++) {
+        var cells = parseCSVLine(lines[k]).map(function (c) { return c.trim().toLowerCase(); });
+        if (cells.indexOf(hint) !== -1) { start = k; break; }
+      }
+    }
+    var headers = parseCSVLine(lines[start]);
+    return lines.slice(start + 1).map(function (line) {
       var vals = parseCSVLine(line), row = {};
       headers.forEach(function (h, i) { row[h.trim()] = (vals[i] || '').trim(); });
       return row;
@@ -54,10 +64,12 @@
   }
 
   // fetch one published tab by gid -> Promise<array of {header: value}>
-  function fetchTab(gid) {
+  // headerHint (optional): a column name to locate the real header row, skipping
+  // any leading title rows (e.g. a "FAQs,," row above the headers).
+  function fetchTab(gid, headerHint) {
     return fetch(SHEET_BASE + '&gid=' + gid)
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
-      .then(parseCSV);
+      .then(function (text) { return parseCSV(text, headerHint); });
   }
 
   window.MeanderSheet = { SHEET_BASE: SHEET_BASE, parseCSV: parseCSV, parseCSVLine: parseCSVLine, esc: esc, linkify: linkify, fetchTab: fetchTab };
