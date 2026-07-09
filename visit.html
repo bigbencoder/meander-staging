@@ -18,6 +18,8 @@
   .faq:last-child { border-bottom: 1px solid var(--line); }
   .faq-q { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 1.15rem; letter-spacing: .3px; margin-bottom: .5rem; }
   .faq-a { color: var(--text-muted); line-height: 1.65; }
+  .faq-a a { color: var(--green-primary); text-decoration: underline; word-break: break-word; }
+  .faq-links { margin-top: .5rem; font-size: .9rem; }
 </style>
 </head>
 <body>
@@ -233,8 +235,19 @@ document.addEventListener('DOMContentLoaded', function () {
       var items = rows.filter(function (r) { return (r.Question || r.question || '').trim(); });
       if (!list || !items.length) return;
       list.innerHTML = items.map(function (r) {
-        return '<div class="faq"><div class="faq-q">' + MeanderSheet.esc(r.Question || r.question) +
-               '</div><div class="faq-a">' + MeanderSheet.esc(r.Answer || r.answer || '') + '</div></div>';
+        var q = r.Question || r.question || '';
+        var a = r.Answer || r.answer || '';
+        var urls = (r.URLs || r.Urls || r.urls || '').trim();
+        var answerHtml = MeanderSheet.linkify(a);
+        if (urls) {
+          var extra = urls.split(/[\s,]+/).filter(Boolean).filter(function (u) { return a.indexOf(u) === -1; });
+          if (extra.length) {
+            answerHtml += '<div class="faq-links">' + extra.map(function (u) {
+              return '<a href="' + MeanderSheet.esc(u) + '" target="_blank" rel="noopener">' + MeanderSheet.esc(u) + '</a>';
+            }).join(' &middot; ') + '</div>';
+          }
+        }
+        return '<div class="faq"><div class="faq-q">' + MeanderSheet.esc(q) + '</div><div class="faq-a">' + answerHtml + '</div></div>';
       }).join('');
       if (faqSection) { faqSection.style.display = ''; faqSection.classList.add('visible'); }
     }).catch(function () { /* stay hidden */ });

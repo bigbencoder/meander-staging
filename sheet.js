@@ -39,6 +39,20 @@
     return d.innerHTML;
   }
 
+  // escape text, then turn any http(s) URLs into clickable links (injection-safe)
+  function linkify(text) {
+    text = text == null ? '' : String(text);
+    var urlRe = /(https?:\/\/[^\s)]+)/g, out = '', last = 0, m;
+    while ((m = urlRe.exec(text))) {
+      out += esc(text.slice(last, m.index));
+      var url = m[1];
+      out += '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(url) + '</a>';
+      last = m.index + url.length;
+    }
+    out += esc(text.slice(last));
+    return out;
+  }
+
   // fetch one published tab by gid -> Promise<array of {header: value}>
   function fetchTab(gid) {
     return fetch(SHEET_BASE + '&gid=' + gid)
@@ -46,5 +60,5 @@
       .then(parseCSV);
   }
 
-  window.MeanderSheet = { SHEET_BASE: SHEET_BASE, parseCSV: parseCSV, parseCSVLine: parseCSVLine, esc: esc, fetchTab: fetchTab };
+  window.MeanderSheet = { SHEET_BASE: SHEET_BASE, parseCSV: parseCSV, parseCSVLine: parseCSVLine, esc: esc, linkify: linkify, fetchTab: fetchTab };
 })();
