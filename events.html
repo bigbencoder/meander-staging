@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Events · Meander Brewing Co.</title>
+<meta name="description" content="Trivia, live music, fundraisers, and taproom events at Meander Brewing Co. in Buford, Georgia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="meander.css">
+<script src="flags.js"></script>
+<script>if(window.MEANDER_FLAGS&&window.MEANDER_FLAGS.eventsComingSoon)document.documentElement.setAttribute('data-events','soon');</script>
+<style>#events-coming-soon{display:none}html[data-events="soon"] #events-content{display:none}html[data-events="soon"] #events-coming-soon{display:block}</style>
+</head>
+<body>
+
+<input type="checkbox" id="nav-toggle" aria-hidden="true">
+<header class="top">
+  <div class="top-inner">
+    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <label for="nav-toggle" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+</header>
+<div class="nav-overlay" role="dialog" aria-label="Site navigation">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="menu.html" class="nav-link">On Tap</a>
+  <a href="about.html" class="nav-link">About</a>
+  <a href="events.html" class="nav-link active">Events</a>
+  <a href="visit.html" class="nav-link">Visit</a>
+  <div class="nav-sub">
+    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
+    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
+    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
+  </div>
+  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
+</div>
+
+<!-- ====== HERO BANNER ====== -->
+<div class="img-break" style="min-height: 40vh; height: 40vh;">
+  <img src="images/hero.jpg" alt="Meander taproom packed with live music">
+  <div class="img-break-overlay">
+    <div class="img-break-text">
+      <span class="eyebrow">What's Happening</span>
+      <h2 style="font-size: clamp(2.4rem, 5vw, 4rem);">Events at Meander</h2>
+    </div>
+  </div>
+</div>
+
+<section id="events-content">
+  <div class="wrap">
+    <p class="tagline center reveal" style="margin: 0 auto 3rem; max-width: 52ch;">
+      Trivia, live music, book club, release parties, and fundraisers. The taproom is built to host — check in often, the calendar stays busy.
+    </p>
+
+    <h2 class="cat-header reveal">This Week</h2>
+    <div class="event-list">
+      <div class="event reveal stagger-1">
+        <div class="event-date"><span class="d">23</span><span class="m">Apr</span></div>
+        <div>
+          <div class="event-title">Wednesday Trivia</div>
+          <div class="event-time">7:00 PM – 9:00 PM</div>
+          <div class="event-desc">Six rounds, team tab credit for the winners, no cover. Show up by 6:30 to grab a table.</div>
+        </div>
+      </div>
+      <div class="event reveal stagger-2">
+        <div class="event-date"><span class="d">25</span><span class="m">Apr</span></div>
+        <div>
+          <div class="event-title">Live Music · Porch Sessions</div>
+          <div class="event-time">7:00 PM – 10:00 PM</div>
+          <div class="event-desc">Acoustic duo on the outdoor stage, rotating local acts. Patio seating first-come.</div>
+        </div>
+      </div>
+      <div class="event reveal stagger-3">
+        <div class="event-date"><span class="d">26</span><span class="m">Apr</span></div>
+        <div>
+          <div class="event-title">Meandering Minds Book Club</div>
+          <div class="event-time">2:00 PM – 4:00 PM</div>
+          <div class="event-desc">Monthly book club in the taproom. Grab a pour, pull up a chair, and join the conversation. Check Instagram for this month's pick.</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="cat-header reveal">Coming Up</h2>
+    <div class="event-list">
+      <div class="event reveal stagger-1">
+        <div class="event-date"><span class="d">02</span><span class="m">May</span></div>
+        <div>
+          <div class="event-title">Beer Release · Hoptical Illusion v2</div>
+          <div class="event-time">4:00 PM – 9:00 PM</div>
+          <div class="event-desc">Second go at our 9.5% hazy double IPA. First 50 in get a commemorative glass.</div>
+        </div>
+      </div>
+      <div class="event reveal stagger-2">
+        <div class="event-date"><span class="d">10</span><span class="m">May</span></div>
+        <div>
+          <div class="event-title">Fundraiser · Gwinnett Animal Shelter</div>
+          <div class="event-time">2:00 PM – 8:00 PM</div>
+          <div class="event-desc">$1 from every pour goes to the shelter. Adoptable dogs on the patio from 3-5.</div>
+        </div>
+      </div>
+      <div class="event reveal stagger-3">
+        <div class="event-date"><span class="d">17</span><span class="m">May</span></div>
+        <div>
+          <div class="event-title">Meet the Brewer · Mike Branam</div>
+          <div class="event-time">6:00 PM – 8:00 PM</div>
+          <div class="event-desc">Walk-through of the brewhouse, a quick history of Meander's award years, and pours of three barrel-aged specials not on the regular list.</div>
+        </div>
+      </div>
+      <div class="event reveal stagger-4">
+        <div class="event-date"><span class="d">24</span><span class="m">May</span></div>
+        <div>
+          <div class="event-title">Memorial Day Weekend Block Party</div>
+          <div class="event-time">12:00 PM – 10:00 PM</div>
+          <div class="event-desc">Live music all afternoon, kids' root beer flights, and a cornhole bracket with a keg on the line. Food from Italian Pie next door.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="center reveal" style="margin-top: 4rem; color: var(--text-muted); font-style: italic; max-width: 48ch; margin-left: auto; margin-right: auto;">
+      Want your event here? Private rentals for the taproom, beer garden, or full venue are available Monday and Tuesday.
+      <br><br>
+      Email <a href="mailto:events@meanderbrewingco.com">events@meanderbrewingco.com</a> or call <a href="tel:+16787658133">(678) 765-8133</a>.
+    </p>
+  </div>
+</section>
+
+<section id="events-coming-soon">
+  <div class="wrap" style="text-align: center; padding: 5rem 0;">
+    <h2 class="cat-header reveal" style="justify-content: center;">Events &mdash; Coming Soon</h2>
+    <p class="tagline center reveal" style="margin: 1.5rem auto 0; max-width: 46ch;">
+      Our events calendar is on its way. Check back soon &mdash; or follow us on
+      <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> for what's happening at the taproom.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="brand">Meander<span class="sub">Brewing Co.</span></div>
+      <p style="color: rgba(255,255,255,.6); font-size: .92rem; margin-top: 1rem; max-width: 36ch;">
+        110 E. Moreno St., Buford, GA 30518<br>
+        (678) 765-8133
+      </p>
+    </div>
+    <div class="foot-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="menu.html">On Tap</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="visit.html">Visit</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="https://www.instagram.com/meanderbrewingco/">Instagram</a></li>
+        <li><a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a></li>
+        <li><a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <span>&copy; 2026 Meander Brewing Co. · Buford, GA</span>
+    <span>Please drink responsibly. Must be 21+.</span>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .img-break').forEach(el => obs.observe(el));
+  const header = document.querySelector('.top');
+  window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+  document.querySelectorAll('.nav-overlay .nav-link').forEach(link => {
+    link.addEventListener('click', () => { document.getElementById('nav-toggle').checked = false; });
+  });
+});
+</script>
+
+</body>
+</html>

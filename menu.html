@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>On Tap · Meander Brewing Co.</title>
+<meta name="description" content="The full Meander Brewing Co. beer menu — IPAs, lagers, ales, stouts, sours, and more. Buford, GA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="meander.css">
+<script src="flags.js"></script>
+<style>
+  .beer.sold-out { opacity: 0.45; }
+  .beer.sold-out .beer-name::after {
+    content: "SOLD OUT";
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: #b44;
+    margin-left: 0.8rem;
+    vertical-align: middle;
+  }
+  .sheet-error {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 2rem;
+  }
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="nav-toggle" aria-hidden="true">
+<header class="top">
+  <div class="top-inner">
+    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <label for="nav-toggle" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+</header>
+<div class="nav-overlay" role="dialog" aria-label="Site navigation">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="menu.html" class="nav-link active">On Tap</a>
+  <a href="about.html" class="nav-link">About</a>
+  <a href="events.html" class="nav-link">Events</a>
+  <a href="visit.html" class="nav-link">Visit</a>
+  <div class="nav-sub">
+    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
+    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
+    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
+  </div>
+  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
+</div>
+
+<!-- ====== HERO BANNER ====== -->
+<div class="img-break" style="min-height: 40vh; height: 40vh;">
+  <img src="images/taproom2.jpg" alt="Fresh hops">
+  <div class="img-break-overlay">
+    <div class="img-break-text">
+      <span class="eyebrow">The Full List</span>
+      <h2 style="font-size: clamp(2.4rem, 5vw, 4rem);">On Tap</h2>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="tagline center reveal" style="margin: 0 auto 3rem; max-width: 56ch;">Up to 20 beers pouring at any given time. Flights are always welcome. Availability rotates — if something sold out last visit, check back this week.</p>
+
+    <!-- Beer list populated from Google Sheets -->
+    <div id="beer-menu"></div>
+
+    <p class="center reveal" style="margin-top: 3.5rem; color: var(--text-muted); font-style: italic;">
+      Tap list rotates. Current selection confirmed at the bar.<br>
+      Track the real-time list on <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="brand">Meander<span class="sub">Brewing Co.</span></div>
+      <p style="color: rgba(255,255,255,.6); font-size: .92rem; margin-top: 1rem; max-width: 36ch;">
+        110 E. Moreno St., Buford, GA 30518<br>
+        (678) 765-8133
+      </p>
+    </div>
+    <div class="foot-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="menu.html">On Tap</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="visit.html">Visit</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="https://www.instagram.com/meanderbrewingco/">Instagram</a></li>
+        <li><a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a></li>
+        <li><a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <span>&copy; 2026 Meander Brewing Co. · Buford, GA</span>
+    <span>Please drink responsibly. Must be 21+.</span>
+  </div>
+</footer>
+
+<script>
+const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv';
+const BEERS_URL   = SHEET_BASE + '&gid=0';
+const DISPLAY_URL = SHEET_BASE + '&gid=1651428800';
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = parseCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = parseCSVLine(line);
+    const row = {};
+    headers.forEach((h, i) => row[h.trim()] = (vals[i] || '').trim());
+    return row;
+  });
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuotes) {
+      if (c === '"' && line[i + 1] === '"') { current += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else { current += c; }
+    } else {
+      if (c === '"') { inQuotes = true; }
+      else if (c === ',') { result.push(current); current = ''; }
+      else { current += c; }
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function parseDisplay(text) {
+  const lines = text.trim().split('\n');
+  return lines
+    .map(line => parseCSVLine(line))
+    .filter(vals => {
+      const first = vals[0] || '';
+      return first && !first.startsWith('This defines') && !first.startsWith('Category group');
+    })
+    .map(vals => ({
+      heading: vals[0] || '',
+      categories: vals.slice(1).map(v => v.trim().toLowerCase()).filter(Boolean)
+    }));
+}
+
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function renderMenu(beers, groups) {
+  const container = document.getElementById('beer-menu');
+
+  let html = '';
+  for (const group of groups) {
+    const list = beers.filter(b => {
+      const cat = (b.Category || '').trim().toLowerCase();
+      return group.categories.includes(cat);
+    });
+    if (list.length === 0) continue;
+
+    html += '<h2 class="cat-header reveal">' + esc(group.heading) + '</h2>\n<div class="beer-list">\n';
+    list.forEach(beer => {
+      const soldOut = (beer.Status || '').toLowerCase().includes('sold out');
+      const cls = soldOut ? 'beer reveal sold-out' : 'beer reveal';
+      html += '  <div class="' + cls + '">'
+        + '<div class="beer-head"><div>'
+        + '<div class="beer-name">' + esc(beer.Name) + '</div>'
+        + '<div class="beer-style">' + esc(beer.Style) + '</div>'
+        + '</div>'
+        + '<div class="beer-abv">' + esc(beer.ABV || '') + '</div></div>'
+        + '<p class="beer-desc">' + esc(beer.Description) + '</p>'
+        + '</div>\n';
+    });
+    html += '</div>\n';
+  }
+
+  container.innerHTML = html;
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  container.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Promise.all([
+    fetch(BEERS_URL).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); }),
+    fetch(DISPLAY_URL).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
+  ])
+  .then(([beersCsv, displayCsv]) => {
+    const beers = parseCSV(beersCsv).filter(b => b.Name);
+    const groups = parseDisplay(displayCsv);
+    renderMenu(beers, groups);
+  })
+  .catch(() => {
+    document.getElementById('beer-menu').innerHTML =
+      '<p class="sheet-error">Menu is loading — check back in a moment, or ask at the bar.</p>';
+  });
+
+  const header = document.querySelector('.top');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+  document.querySelectorAll('.nav-overlay .nav-link').forEach(link => {
+    link.addEventListener('click', () => { document.getElementById('nav-toggle').checked = false; });
+  });
+});
+</script>
+
+</body>
+</html>
