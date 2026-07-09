@@ -11,6 +11,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="meander.css">
 <script src="flags.js"></script>
+<script src="sheet.js"></script>
+<style>
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq { border-top: 1px solid var(--line); padding: 1.4rem 0; }
+  .faq:last-child { border-bottom: 1px solid var(--line); }
+  .faq-q { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 1.15rem; letter-spacing: .3px; margin-bottom: .5rem; }
+  .faq-a { color: var(--text-muted); line-height: 1.65; }
+</style>
 </head>
 <body>
 
@@ -53,7 +61,7 @@
     <div class="visit-grid">
       <div class="hours-block reveal-left">
         <h3 style="margin-top:0">Taproom Hours</h3>
-        <table class="hours-table">
+        <table class="hours-table" id="hours-table">
           <tr><td>Monday</td><td class="closed">Closed</td></tr>
           <tr><td>Tuesday</td><td class="closed">Closed</td></tr>
           <tr><td>Wednesday</td><td>3:00 PM – 10:00 PM</td></tr>
@@ -128,6 +136,11 @@
         <p>No kitchen on site — but Italian Pie is right next door and delivers to the taproom. Outside food is always welcome too.</p>
       </div>
     </div>
+
+    <div id="faq-section" style="margin-top: 4.5rem; display:none;" class="reveal">
+      <h2 class="cat-header" style="justify-content:center; text-align:center;">Frequently Asked</h2>
+      <div id="faq-list" class="faq-list"></div>
+    </div>
   </div>
 </section>
 
@@ -186,6 +199,46 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.nav-overlay .nav-link').forEach(link => {
     link.addEventListener('click', () => { document.getElementById('nav-toggle').checked = false; });
   });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  /* === Google Sheet tab gids — set these after creating the tabs === */
+  var HOURS_GID = null;  /* <- Hours tab gid */
+  var FAQ_GID   = null;  /* <- FAQ tab gid   */
+
+  /* Hours: replace the static table on success; the static rows remain a fallback */
+  if (HOURS_GID != null && window.MeanderSheet) {
+    MeanderSheet.fetchTab(HOURS_GID).then(function (rows) {
+      var table = document.getElementById('hours-table');
+      if (!table) return;
+      var html = '';
+      rows.forEach(function (r) {
+        var day = (r.Day || r.day || '').trim();
+        var hrs = (r.Hours || r.hours || '').trim();
+        if (!day) return;
+        var closed = /closed/i.test(hrs);
+        html += '<tr><td>' + MeanderSheet.esc(day) + '</td><td' + (closed ? ' class="closed"' : '') + '>' + MeanderSheet.esc(hrs) + '</td></tr>';
+      });
+      if (html) table.innerHTML = html;
+    }).catch(function () { /* keep the static fallback table */ });
+  }
+
+  /* FAQ: reveal + populate the section on success; stay hidden otherwise */
+  var faqSection = document.getElementById('faq-section');
+  if (FAQ_GID != null && window.MeanderSheet) {
+    MeanderSheet.fetchTab(FAQ_GID).then(function (rows) {
+      var list = document.getElementById('faq-list');
+      var items = rows.filter(function (r) { return (r.Question || r.question || '').trim(); });
+      if (!list || !items.length) return;
+      list.innerHTML = items.map(function (r) {
+        return '<div class="faq"><div class="faq-q">' + MeanderSheet.esc(r.Question || r.question) +
+               '</div><div class="faq-a">' + MeanderSheet.esc(r.Answer || r.answer || '') + '</div></div>';
+      }).join('');
+      if (faqSection) { faqSection.style.display = ''; faqSection.classList.add('visible'); }
+    }).catch(function () { /* stay hidden */ });
+  }
 });
 </script>
 
