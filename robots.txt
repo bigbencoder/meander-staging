@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /sanity.html
 
 Sitemap: https://meander.benannaink.com/sitemap.xml
