@@ -169,6 +169,22 @@
 const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv';
 const BEERS_URL   = SHEET_BASE + '&gid=0';
 const DISPLAY_URL = SHEET_BASE + '&gid=1651428800';
+const SETTINGS_GID = null;  /* <- Settings tab gid (set when the tab exists) */
+
+// Display settings, overridable from the sheet's "Settings" tab (key/value rows).
+const SETTINGS = { scrollSpeed: 30 };  // px/sec for smooth scroll; higher = faster
+function applySettings(csv) {
+  csv.trim().split('\n').forEach(function (line) {
+    var c = parseCSVLine(line);
+    var key = (c[0] || '').trim().toLowerCase();
+    var val = (c[1] || '').trim();
+    if (key === 'scroll_speed') {
+      var n = parseFloat(val);
+      if (!isNaN(n) && n > 0) SETTINGS.scrollSpeed = n;
+    }
+    // future settings: add more `if (key === '...')` branches here
+  });
+}
 
 function parseCSV(text) {
   const lines = text.trim().split('\n');
@@ -226,6 +242,10 @@ function fmtPrice(val) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Load display settings (scroll speed, etc.) from the sheet; scroll reads them live.
+  if (SETTINGS_GID != null) {
+    fetch(SHEET_BASE + '&gid=' + SETTINGS_GID).then(r => r.text()).then(applySettings).catch(() => {});
+  }
   Promise.all([
     fetch(BEERS_URL).then(r => r.text()),
     fetch(DISPLAY_URL).then(r => r.text())
@@ -284,14 +304,18 @@ document.addEventListener('DOMContentLoaded', () => {
     inner.innerHTML = inner.innerHTML + spacer + clone;
 
     let pos = 0;
-    const speed = 0.5;
+    let last = null;
     const resetPoint = inner.scrollHeight / 2;
 
-    function scroll() {
-      pos += speed;
-      if (pos >= resetPoint) {
-        pos -= resetPoint;
-      }
+    function scroll(ts) {
+      if (last === null) last = ts;
+      const dt = (ts - last) / 1000;  // seconds since last frame
+      last = ts;
+      // SETTINGS.scrollSpeed is px/sec and read live, so a sheet edit takes effect
+      // on the next loop without reloading the TV. Time-based = consistent speed
+      // regardless of the display's frame rate.
+      pos += SETTINGS.scrollSpeed * dt;
+      if (pos >= resetPoint) pos -= resetPoint;
       inner.style.transform = 'translateY(' + (-pos) + 'px)';
       requestAnimationFrame(scroll);
     }
