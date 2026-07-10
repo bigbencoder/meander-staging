@@ -242,9 +242,15 @@ function fmtPrice(val) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Load display settings (scroll speed, etc.) from the sheet; scroll reads them live.
+  // Load display settings (scroll speed, etc.) from the sheet, and re-check every
+  // 60s so a sheet edit changes the TV without anyone reloading it. The scroll
+  // loop reads SETTINGS live, so new values take effect on the next loop.
   if (SETTINGS_GID != null) {
-    fetch(SHEET_BASE + '&gid=' + SETTINGS_GID).then(r => r.text()).then(applySettings).catch(() => {});
+    const loadSettings = () =>
+      fetch(SHEET_BASE + '&gid=' + SETTINGS_GID + '&_=' + Date.now())
+        .then(r => r.text()).then(applySettings).catch(() => {});
+    loadSettings();
+    setInterval(loadSettings, 60000);
   }
   Promise.all([
     fetch(BEERS_URL).then(r => r.text()),
