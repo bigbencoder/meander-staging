@@ -283,7 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const filterVal = catFilter.trim().toLowerCase();
       groups = groups.filter(g => g.categories.includes(filterVal));
       const heading = groups.length ? groups[0].heading : catFilter;
-      document.querySelector('.img-break-text h2').textContent = heading;
+      const heroHeading = document.querySelector('.img-break-text h1, .img-break-text h2');
+      if (heroHeading) heroHeading.textContent = heading;
       const wrap = document.querySelector('#beer-menu').parentElement;
       const link = document.createElement('a');
       link.href = showPrices ? 'menu.html?prices=true' : 'menu.html';
