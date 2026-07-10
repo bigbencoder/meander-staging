@@ -393,6 +393,7 @@ section { padding: 5rem 1.5rem; }
   text-align: center;
   color: #fff;
 }
+.img-break-text h1,
 .img-break-text h2 {
   font-size: clamp(2rem, 4vw, 3.5rem);
   color: #fff;

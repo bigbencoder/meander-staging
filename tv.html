@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On Tap · Meander Brewing Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #2d5a3d;
+    --amber-bright: #a06b2d;
+    --ink: #1a1a1a;
+    --cream: #faf8f3;
+    --text-body: #3a3a3a;
+    --text-muted: #777;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; background: var(--cream); font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif; color: var(--text-body); }
+
+  .header-bar {
+    background: var(--green-deep);
+    color: #fff;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-bar .brand {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+  .header-bar .brand .sub {
+    display: block;
+    font-size: .6rem;
+    letter-spacing: .35em;
+    color: rgba(255,255,255,.6);
+    margin-top: 2px;
+  }
+  .header-bar .tagline {
+    font-family: 'Oswald', sans-serif;
+    font-size: .85rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.7);
+  }
+
+  .scroll-container {
+    height: calc(100vh - 70px);
+    overflow: hidden;
+    position: relative;
+  }
+  .scroll-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 3rem;
+  }
+
+  .cat-header {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--green-deep);
+    margin: 2rem 0 .8rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid #e0dbd2;
+  }
+  .cat-header:first-of-type { margin-top: 0; }
+
+  .beer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .beer-card {
+    background: #fff;
+    border-left: 4px solid var(--green-deep);
+    padding: 1rem 1.2rem;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .beer-card.sold-out { opacity: 0.4; }
+
+  .beer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .beer-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .beer-abv {
+    font-family: 'Oswald', sans-serif;
+    color: var(--amber-bright);
+    font-size: .95rem;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .beer-style {
+    font-size: .75rem;
+    color: var(--green-deep);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .beer-desc {
+    color: var(--text-muted);
+    font-size: .85rem;
+    line-height: 1.4;
+    margin-top: .4rem;
+  }
+  .beer-prices {
+    display: flex;
+    gap: 1rem;
+    margin-top: .4rem;
+    justify-content: flex-end;
+    font-family: 'Oswald', sans-serif;
+    font-size: .85rem;
+  }
+  .size-col { text-align: center; }
+  .size-label {
+    color: var(--text-muted);
+    font-size: .65rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    display: block;
+  }
+  .size-price {
+    color: var(--amber-bright);
+    font-weight: 500;
+  }
+
+  .sold-out .beer-name::after {
+    content: "SOLD OUT";
+    font-family: 'Oswald', sans-serif;
+    font-size: .6rem;
+    letter-spacing: 2px;
+    color: #b44;
+    margin-left: .6rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-bar">
+  <div class="brand">Meander<span class="sub">Brewing Co.</span></div>
+  <div class="tagline">On Tap</div>
+</div>
+
+<div class="scroll-container">
+  <div class="scroll-inner" id="beer-menu"></div>
+</div>
+
+<script>
+const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv';
+const BEERS_URL   = SHEET_BASE + '&gid=0';
+const DISPLAY_URL = SHEET_BASE + '&gid=1651428800';
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = parseCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = parseCSVLine(line);
+    const row = {};
+    headers.forEach((h, i) => row[h.trim()] = (vals[i] || '').trim());
+    return row;
+  });
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuotes) {
+      if (c === '"' && line[i + 1] === '"') { current += '"'; i++; }
+      else if (c === '"') inQuotes = false;
+      else current += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { result.push(current); current = ''; }
+      else current += c;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function parseDisplay(text) {
+  const lines = text.trim().split('\n');
+  return lines
+    .map(line => parseCSVLine(line))
+    .filter(vals => {
+      const first = vals[0] || '';
+      return first && !first.startsWith('This defines') && !first.startsWith('Category group');
+    })
+    .map(vals => ({
+      heading: vals[0] || '',
+      categories: vals.slice(1).map(v => v.trim().toLowerCase()).filter(Boolean)
+    }));
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function fmtPrice(val) {
+  if (!val) return '';
+  val = val.trim();
+  if (!val.startsWith('$')) val = '$' + val;
+  if (val.indexOf('.') === -1) val += '.00';
+  return val;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Promise.all([
+    fetch(BEERS_URL).then(r => r.text()),
+    fetch(DISPLAY_URL).then(r => r.text())
+  ]).then(([beersCsv, displayCsv]) => {
+    const beers = parseCSV(beersCsv).filter(b => b.Name);
+    const groups = parseDisplay(displayCsv);
+    const container = document.getElementById('beer-menu');
+
+    let html = '';
+    for (const group of groups) {
+      const list = beers.filter(b => {
+        const cat = (b.Category || '').trim().toLowerCase();
+        const st = (b.Status || '').toLowerCase();
+        return group.categories.includes(cat) && st !== 'hide';
+      });
+      if (list.length === 0) continue;
+
+      html += '<div class="cat-header">' + esc(group.heading) + '</div><div class="beer-grid">';
+      list.forEach(beer => {
+        const so = (beer.Status || '').toLowerCase().includes('sold out');
+        const p5 = beer['Price - 5oz'], p10 = beer['Price - 10oz'], p16 = beer['Price - 16oz'];
+        html += '<div class="beer-card' + (so ? ' sold-out' : '') + '">'
+          + '<div class="beer-top"><div>'
+          + '<div class="beer-name">' + esc(beer.Name) + '</div>'
+          + '<div class="beer-style">' + esc(beer.Style) + '</div>'
+          + '</div>'
+          + '<div class="beer-abv">' + esc(beer.ABV || '') + '</div></div>'
+          + ((p5 || p10 || p16) ? '<div class="beer-prices">'
+            + (p5 ? '<div class="size-col"><span class="size-label">5oz</span><span class="size-price">' + esc(fmtPrice(p5)) + '</span></div>' : '')
+            + (p10 ? '<div class="size-col"><span class="size-label">10oz</span><span class="size-price">' + esc(fmtPrice(p10)) + '</span></div>' : '')
+            + (p16 ? '<div class="size-col"><span class="size-label">16oz</span><span class="size-price">' + esc(fmtPrice(p16)) + '</span></div>' : '')
+            + '</div>' : '')
+          + '<div class="beer-desc">' + esc(beer.Description) + '</div>'
+          + '</div>';
+      });
+      html += '</div>';
+    }
+    container.innerHTML = html;
+
+    // Scroll mode: ?scroll=smooth (default) or ?scroll=page
+    const scrollMode = new URLSearchParams(window.location.search).get('scroll') || 'smooth';
+    if (scrollMode === 'page') {
+      startPageScroll();
+    } else {
+      startSmoothScroll();
+    }
+  });
+
+  function startSmoothScroll() {
+    const container = document.querySelector('.scroll-container');
+    const inner = document.querySelector('.scroll-inner');
+
+    // Clone content and append for seamless loop
+    const clone = inner.innerHTML;
+    const spacer = '<div style="height:4rem"></div>';
+    inner.innerHTML = inner.innerHTML + spacer + clone;
+
+    let pos = 0;
+    const speed = 0.5;
+    const resetPoint = inner.scrollHeight / 2;
+
+    function scroll() {
+      pos += speed;
+      if (pos >= resetPoint) {
+        pos -= resetPoint;
+      }
+      inner.style.transform = 'translateY(' + (-pos) + 'px)';
+      requestAnimationFrame(scroll);
+    }
+    requestAnimationFrame(scroll);
+  }
+
+  function startPageScroll() {
+    const container = document.querySelector('.scroll-container');
+    const inner = document.querySelector('.scroll-inner');
+    const pageHeight = container.clientHeight;
+    const totalHeight = inner.scrollHeight;
+    const pages = Math.ceil(totalHeight / pageHeight);
+    let currentPage = 0;
+    const holdTime = 8000;
+
+    inner.style.transition = 'transform 1.2s ease-in-out';
+
+    function showPage() {
+      inner.style.transform = 'translateY(' + (-(currentPage * pageHeight)) + 'px)';
+      currentPage++;
+      if (currentPage >= pages) {
+        setTimeout(() => {
+          inner.style.transition = 'none';
+          inner.style.transform = 'translateY(0)';
+          currentPage = 0;
+          requestAnimationFrame(() => {
+            inner.style.transition = 'transform 1.2s ease-in-out';
+            setTimeout(showPage, holdTime);
+          });
+        }, holdTime);
+      } else {
+        setTimeout(showPage, holdTime);
+      }
+    }
+    setTimeout(showPage, holdTime);
+  }
+});
+</script>
+
+</body>
+</html>

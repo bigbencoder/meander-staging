@@ -6,6 +6,14 @@
 <meta name="color-scheme" content="light">
 <title>On Tap · Meander Brewing Co.</title>
 <meta name="description" content="The full Meander Brewing Co. beer menu — IPAs, lagers, ales, stouts, sours, and more. Buford, GA.">
+<link rel="canonical" href="https://meander.benannaink.com/menu.html">
+<meta property="og:title" content="On Tap — Meander Brewing Co.">
+<meta property="og:description" content="The full Meander Brewing Co. beer menu — IPAs, lagers, ales, stouts, sours, and more. Buford, GA.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meander.benannaink.com/menu.html">
+<meta property="og:image" content="https://meander.benannaink.com/images/taproom2.jpg">
+<meta property="og:site_name" content="Meander Brewing Co.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -21,6 +29,46 @@
     color: #b44;
     margin-left: 0.8rem;
     vertical-align: middle;
+  }
+  .beer-price {
+    font-family: 'Oswald', sans-serif;
+    color: var(--amber-bright);
+    font-size: .95rem;
+    letter-spacing: .1em;
+  }
+  .beer-prices {
+    display: flex;
+    gap: 1rem;
+    margin-top: .4rem;
+    justify-content: flex-end;
+    font-family: 'Oswald', sans-serif;
+    font-size: .85rem;
+  }
+  .beer-prices .size-col {
+    text-align: center;
+  }
+  .beer-prices .size-label {
+    color: var(--text-muted);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    display: block;
+  }
+  .beer-prices .size-price {
+    color: var(--amber-bright);
+    font-weight: 500;
+    letter-spacing: .05em;
+  }
+  .beer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: nowrap;
+  }
+  .beer-abv {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .sheet-error {
     text-align: center;
@@ -61,7 +109,7 @@
   <div class="img-break-overlay">
     <div class="img-break-text">
       <span class="eyebrow">The Full List</span>
-      <h2 style="font-size: clamp(2.4rem, 5vw, 4rem);">On Tap</h2>
+      <h1 style="font-size: clamp(2.4rem, 5vw, 4rem);">On Tap</h1>
     </div>
   </div>
 </div>
@@ -163,20 +211,29 @@ function parseDisplay(text) {
     }));
 }
 
+function fmtPrice(val) {
+  if (!val) return '';
+  val = val.trim();
+  if (!val.startsWith('$')) val = '$' + val;
+  if (val.indexOf('.') === -1) val += '.00';
+  return val;
+}
+
 function esc(str) {
   const d = document.createElement('div');
   d.textContent = str;
   return d.innerHTML;
 }
 
-function renderMenu(beers, groups) {
+function renderMenu(beers, groups, showPrices) {
   const container = document.getElementById('beer-menu');
 
   let html = '';
   for (const group of groups) {
     const list = beers.filter(b => {
       const cat = (b.Category || '').trim().toLowerCase();
-      return group.categories.includes(cat);
+      const st = (b.Status || '').toLowerCase();
+      return group.categories.includes(cat) && st !== 'hide';
     });
     if (list.length === 0) continue;
 
@@ -190,6 +247,12 @@ function renderMenu(beers, groups) {
         + '<div class="beer-style">' + esc(beer.Style) + '</div>'
         + '</div>'
         + '<div class="beer-abv">' + esc(beer.ABV || '') + '</div></div>'
+        + (showPrices && (beer['Price - 5oz'] || beer['Price - 10oz'] || beer['Price - 16oz'])
+          ? '<div class="beer-prices">'
+            + (beer['Price - 5oz'] ? '<div class="size-col"><span class="size-label">5oz</span><span class="size-price">' + esc(fmtPrice(beer['Price - 5oz'])) + '</span></div>' : '')
+            + (beer['Price - 10oz'] ? '<div class="size-col"><span class="size-label">10oz</span><span class="size-price">' + esc(fmtPrice(beer['Price - 10oz'])) + '</span></div>' : '')
+            + (beer['Price - 16oz'] ? '<div class="size-col"><span class="size-label">16oz</span><span class="size-price">' + esc(fmtPrice(beer['Price - 16oz'])) + '</span></div>' : '')
+            + '</div>' : '')
         + '<p class="beer-desc">' + esc(beer.Description) + '</p>'
         + '</div>\n';
     });
@@ -211,8 +274,27 @@ document.addEventListener('DOMContentLoaded', () => {
   ])
   .then(([beersCsv, displayCsv]) => {
     const beers = parseCSV(beersCsv).filter(b => b.Name);
-    const groups = parseDisplay(displayCsv);
-    renderMenu(beers, groups);
+    let groups = parseDisplay(displayCsv);
+
+    const params = new URLSearchParams(window.location.search);
+    const catFilter = params.get('cat');
+    const showPrices = params.get('prices') === 'true';
+    if (catFilter) {
+      const filterVal = catFilter.trim().toLowerCase();
+      groups = groups.filter(g => g.categories.includes(filterVal));
+      const heading = groups.length ? groups[0].heading : catFilter;
+      document.querySelector('.img-break-text h2').textContent = heading;
+      const wrap = document.querySelector('#beer-menu').parentElement;
+      const link = document.createElement('a');
+      link.href = showPrices ? 'menu.html?prices=true' : 'menu.html';
+      link.className = 'btn filled';
+      link.textContent = 'See Full Menu';
+      link.style.display = 'inline-block';
+      link.style.marginBottom = '2rem';
+      wrap.insertBefore(link, document.querySelector('#beer-menu'));
+    }
+
+    renderMenu(beers, groups, showPrices);
   })
   .catch(() => {
     document.getElementById('beer-menu').innerHTML =

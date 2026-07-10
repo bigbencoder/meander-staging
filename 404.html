@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Page Not Found · Meander Brewing Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="meander.css">
+<style>
+  .four-oh-four {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+  }
+  .four-oh-four .big-number {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(6rem, 18vw, 14rem);
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--green-deep);
+    line-height: 1;
+    opacity: .15;
+    margin-bottom: -1rem;
+  }
+  .four-oh-four h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: var(--green-deep);
+    margin-bottom: .8rem;
+  }
+  .four-oh-four .sub {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 36ch;
+    margin: 0 auto 2.5rem;
+  }
+  .four-oh-four .cta-row {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="nav-toggle" aria-hidden="true">
+<header class="top">
+  <div class="top-inner">
+    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <label for="nav-toggle" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+</header>
+<div class="nav-overlay" role="dialog" aria-label="Site navigation">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="menu.html" class="nav-link">On Tap</a>
+  <a href="about.html" class="nav-link">About</a>
+  <a href="events.html" class="nav-link">Events</a>
+  <a href="visit.html" class="nav-link">Visit</a>
+  <div class="nav-sub">
+    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
+    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
+    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
+  </div>
+  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
+</div>
+
+<div class="four-oh-four">
+  <div class="big-number">404</div>
+  <h1>This Tap Ran Dry</h1>
+  <p class="sub">The page you're looking for must have been a limited release. Let's get you back to something that's still pouring.</p>
+  <div class="cta-row">
+    <a href="index.html" class="btn filled">Back to Home</a>
+    <a href="menu.html" class="btn">See What's On Tap</a>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="brand">Meander<span class="sub">Brewing Co.</span></div>
+      <p style="color: rgba(255,255,255,.6); font-size: .92rem; margin-top: 1rem; max-width: 36ch;">
+        110 E. Moreno St., Buford, GA 30518<br>
+        (678) 765-8133
+      </p>
+    </div>
+    <div class="foot-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="menu.html">On Tap</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="visit.html">Visit</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="https://www.instagram.com/meanderbrewingco/">Instagram</a></li>
+        <li><a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a></li>
+        <li><a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <span>&copy; 2026 Meander Brewing Co. · Buford, GA</span>
+    <span>Please drink responsibly. Must be 21+.</span>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const header = document.querySelector('.top');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+  document.querySelectorAll('.nav-overlay .nav-link').forEach(link => {
+    link.addEventListener('click', () => { document.getElementById('nav-toggle').checked = false; });
+  });
+});
+</script>
+
+</body>
+</html>

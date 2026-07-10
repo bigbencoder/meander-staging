@@ -6,13 +6,19 @@
 <meta name="color-scheme" content="light">
 <title>Events · Meander Brewing Co.</title>
 <meta name="description" content="Trivia, live music, fundraisers, and taproom events at Meander Brewing Co. in Buford, Georgia.">
+<link rel="canonical" href="https://meander.benannaink.com/events.html">
+<meta property="og:title" content="Events — Meander Brewing Co.">
+<meta property="og:description" content="Trivia, live music, fundraisers, and taproom events at Meander Brewing Co. in Buford, Georgia.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meander.benannaink.com/events.html">
+<meta property="og:image" content="https://meander.benannaink.com/images/hero.jpg">
+<meta property="og:site_name" content="Meander Brewing Co.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="meander.css">
 <script src="flags.js"></script>
-<script>if(window.MEANDER_FLAGS&&window.MEANDER_FLAGS.eventsComingSoon)document.documentElement.setAttribute('data-events','soon');</script>
-<style>#events-coming-soon{display:none}html[data-events="soon"] #events-content{display:none}html[data-events="soon"] #events-coming-soon{display:block}</style>
 </head>
 <body>
 
@@ -45,95 +51,26 @@
   <div class="img-break-overlay">
     <div class="img-break-text">
       <span class="eyebrow">What's Happening</span>
-      <h2 style="font-size: clamp(2.4rem, 5vw, 4rem);">Events at Meander</h2>
+      <h1 style="font-size: clamp(2.4rem, 5vw, 4rem);">Events at Meander</h1>
     </div>
   </div>
 </div>
 
-<section id="events-content">
+<section>
   <div class="wrap">
     <p class="tagline center reveal" style="margin: 0 auto 3rem; max-width: 52ch;">
       Trivia, live music, book club, release parties, and fundraisers. The taproom is built to host — check in often, the calendar stays busy.
     </p>
 
-    <h2 class="cat-header reveal">This Week</h2>
-    <div class="event-list">
-      <div class="event reveal stagger-1">
-        <div class="event-date"><span class="d">23</span><span class="m">Apr</span></div>
-        <div>
-          <div class="event-title">Wednesday Trivia</div>
-          <div class="event-time">7:00 PM – 9:00 PM</div>
-          <div class="event-desc">Six rounds, team tab credit for the winners, no cover. Show up by 6:30 to grab a table.</div>
-        </div>
-      </div>
-      <div class="event reveal stagger-2">
-        <div class="event-date"><span class="d">25</span><span class="m">Apr</span></div>
-        <div>
-          <div class="event-title">Live Music · Porch Sessions</div>
-          <div class="event-time">7:00 PM – 10:00 PM</div>
-          <div class="event-desc">Acoustic duo on the outdoor stage, rotating local acts. Patio seating first-come.</div>
-        </div>
-      </div>
-      <div class="event reveal stagger-3">
-        <div class="event-date"><span class="d">26</span><span class="m">Apr</span></div>
-        <div>
-          <div class="event-title">Meandering Minds Book Club</div>
-          <div class="event-time">2:00 PM – 4:00 PM</div>
-          <div class="event-desc">Monthly book club in the taproom. Grab a pour, pull up a chair, and join the conversation. Check Instagram for this month's pick.</div>
-        </div>
-      </div>
-    </div>
-
-    <h2 class="cat-header reveal">Coming Up</h2>
-    <div class="event-list">
-      <div class="event reveal stagger-1">
-        <div class="event-date"><span class="d">02</span><span class="m">May</span></div>
-        <div>
-          <div class="event-title">Beer Release · Hoptical Illusion v2</div>
-          <div class="event-time">4:00 PM – 9:00 PM</div>
-          <div class="event-desc">Second go at our 9.5% hazy double IPA. First 50 in get a commemorative glass.</div>
-        </div>
-      </div>
-      <div class="event reveal stagger-2">
-        <div class="event-date"><span class="d">10</span><span class="m">May</span></div>
-        <div>
-          <div class="event-title">Fundraiser · Gwinnett Animal Shelter</div>
-          <div class="event-time">2:00 PM – 8:00 PM</div>
-          <div class="event-desc">$1 from every pour goes to the shelter. Adoptable dogs on the patio from 3-5.</div>
-        </div>
-      </div>
-      <div class="event reveal stagger-3">
-        <div class="event-date"><span class="d">17</span><span class="m">May</span></div>
-        <div>
-          <div class="event-title">Meet the Brewer · Mike Branam</div>
-          <div class="event-time">6:00 PM – 8:00 PM</div>
-          <div class="event-desc">Walk-through of the brewhouse, a quick history of Meander's award years, and pours of three barrel-aged specials not on the regular list.</div>
-        </div>
-      </div>
-      <div class="event reveal stagger-4">
-        <div class="event-date"><span class="d">24</span><span class="m">May</span></div>
-        <div>
-          <div class="event-title">Memorial Day Weekend Block Party</div>
-          <div class="event-time">12:00 PM – 10:00 PM</div>
-          <div class="event-desc">Live music all afternoon, kids' root beer flights, and a cornhole bracket with a keg on the line. Food from Italian Pie next door.</div>
-        </div>
-      </div>
+    <!-- Events are rendered from the Google Sheet "Events" tab (published CSV). -->
+    <div id="events-root">
+      <p class="center" style="color: var(--text-muted); font-style: italic;">Loading events…</p>
     </div>
 
     <p class="center reveal" style="margin-top: 4rem; color: var(--text-muted); font-style: italic; max-width: 48ch; margin-left: auto; margin-right: auto;">
       Want your event here? Private rentals for the taproom, beer garden, or full venue are available Monday and Tuesday.
       <br><br>
       Email <a href="mailto:events@meanderbrewingco.com">events@meanderbrewingco.com</a> or call <a href="tel:+16787658133">(678) 765-8133</a>.
-    </p>
-  </div>
-</section>
-
-<section id="events-coming-soon">
-  <div class="wrap" style="text-align: center; padding: 5rem 0;">
-    <h2 class="cat-header reveal" style="justify-content: center;">Events &mdash; Coming Soon</h2>
-    <p class="tagline center reveal" style="margin: 1.5rem auto 0; max-width: 46ch;">
-      Our events calendar is on its way. Check back soon &mdash; or follow us on
-      <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> for what's happening at the taproom.
     </p>
   </div>
 </section>
@@ -172,16 +109,132 @@
 </footer>
 
 <script>
+// ── Events feed: reads the "Events" tab of the menu spreadsheet (published CSV) ──
+const EVENTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv&gid=1395604298';
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function parseCSVLine(line) {
+  const result = []; let current = ''; let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuotes) {
+      if (c === '"' && line[i + 1] === '"') { current += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else { current += c; }
+    } else {
+      if (c === '"') { inQuotes = true; }
+      else if (c === ',') { result.push(current); current = ''; }
+      else { current += c; }
+    }
+  }
+  result.push(current); return result;
+}
+function parseCSV(text) {
+  const lines = text.replace(/\r/g, '').split('\n').filter(l => l.length);
+  if (!lines.length) return [];
+  const headers = parseCSVLine(lines[0]).map(h => h.trim());
+  return lines.slice(1).map(line => {
+    const vals = parseCSVLine(line); const row = {};
+    headers.forEach((h, i) => row[h] = (vals[i] || '').trim());
+    return row;
+  });
+}
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// "5/14" / "5/14/2026" → { d:"14", m:"May" }; falls back to raw text if unparseable.
+function parseDate(raw) {
+  const t = (raw || '').trim(); if (!t) return null;
+  const parts = t.split('/');
+  const mo = parseInt(parts[0], 10), day = parseInt(parts[1], 10);
+  if (mo >= 1 && mo <= 12 && day >= 1 && day <= 31) {
+    return { d: String(day).padStart(2, '0'), m: MONTHS[mo - 1] };
+  }
+  return { d: esc(t), m: '' };
+}
+function fmtTime(start, end) {
+  start = (start || '').trim(); end = (end || '').trim();
+  if (start && end) return esc(start) + ' – ' + esc(end);
+  return esc(start || end);
+}
+
+function renderEvents(rows) {
+  // keep rows with at least a date or a title
+  const events = rows.filter(r => (r['Date'] || r['Title']));
+  const root = document.getElementById('events-root');
+  if (!events.length) {
+    root.innerHTML = '<p class="center" style="color:var(--text-muted);font-style:italic;">No events scheduled right now — check back soon.</p>';
+    return;
+  }
+  // group by Category, preserving first-seen order (e.g. "This Week", then "Upcoming")
+  const groups = []; const byCat = {};
+  events.forEach(ev => {
+    const cat = (ev['Category'] || 'Events').trim() || 'Events';
+    if (!byCat[cat]) { byCat[cat] = []; groups.push(cat); }
+    byCat[cat].push(ev);
+  });
+  let html = '';
+  groups.forEach(cat => {
+    html += '<h2 class="cat-header reveal">' + esc(cat) + '</h2><div class="event-list">';
+    byCat[cat].forEach((ev, i) => {
+      const dt = parseDate(ev['Date']);
+      const dateBlock = dt ? '<div class="event-date"><span class="d">' + dt.d + '</span><span class="m">' + dt.m + '</span></div>' : '';
+      const time = fmtTime(ev['Start time'], ev['End time']);
+      html += '<div class="event reveal stagger-' + ((i % 4) + 1) + '">' +
+        dateBlock +
+        '<div>' +
+          '<div class="event-title">' + esc(ev['Title']) + '</div>' +
+          (time ? '<div class="event-time">' + time + '</div>' : '') +
+          (ev['Description'] ? '<div class="event-desc">' + esc(ev['Description']) + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+  });
+  root.innerHTML = html;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .img-break').forEach(el => obs.observe(el));
+  const observeReveals = () =>
+    document.querySelectorAll('.reveal:not(.visible), .reveal-left:not(.visible), .reveal-right:not(.visible), .img-break').forEach(el => obs.observe(el));
+  observeReveals();
+
   const header = document.querySelector('.top');
   window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
   document.querySelectorAll('.nav-overlay .nav-link').forEach(link => {
     link.addEventListener('click', () => { document.getElementById('nav-toggle').checked = false; });
   });
+
+  // ── Feature flag: on staging, show "Coming Soon" instead of the calendar ─────
+  if (window.MEANDER_FLAGS && window.MEANDER_FLAGS.eventsComingSoon) {
+    document.getElementById('events-root').innerHTML =
+      '<div style="text-align:center;padding:2rem 0;">' +
+        '<h2 class="cat-header reveal" style="justify-content:center;">Events &mdash; Coming Soon</h2>' +
+        '<p class="tagline center reveal" style="margin:1.25rem auto 0;max-width:46ch;">Our events calendar is on its way. Check back soon &mdash; or follow us on <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> for what\'s happening at the taproom.</p>' +
+      '</div>';
+    observeReveals();
+    return;
+  }
+
+  // ── Events loading ──────────────────────────────────────────────────────────
+  // Fetch the published "Events" tab CSV directly from Google Sheets each load,
+  // so editing the sheet updates the page. (Static GitHub Pages has no server to
+  // mirror the sheet, so the page reads Google directly.) Timeout guards a hang;
+  // on failure we show a graceful fallback rather than a blank section.
+  const EVENTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv&gid=1395604298';
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 15000);
+  fetch(EVENTS_URL, { signal: ctrl.signal })
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(text => { clearTimeout(timer); renderEvents(parseCSV(text)); observeReveals(); })
+    .catch(err => {
+      clearTimeout(timer);
+      console.error('Events load failed:', err);
+      document.getElementById('events-root').innerHTML =
+        '<p class="center" style="color:var(--text-muted);font-style:italic;">Events are taking a moment to load. Please refresh, or check our <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a>.</p>';
+    });
 });
 </script>
 

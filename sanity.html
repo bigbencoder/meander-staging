@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Sanity Check</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, system-ui, sans-serif; background: #1a1a1a; color: #e0e0e0; padding: 1rem; font-size: 14px; line-height: 1.4; }
+  h1 { font-size: 1.1rem; color: #aaa; margin-bottom: 1rem; }
+  .meta { color: #888; font-size: 0.8rem; margin-bottom: 1.5rem; }
+  .section { margin-bottom: 1.5rem; }
+  .section-head { font-size: 0.85rem; font-weight: 600; color: #c8a96e; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 4px; margin-bottom: 6px; }
+  .beer-row { display: flex; gap: 0.5rem; padding: 2px 0; border-bottom: 1px solid #222; align-items: baseline; }
+  .beer-row:last-child { border-bottom: none; }
+  .b-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .b-style { color: #999; flex: 0 0 auto; max-width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .b-abv { color: #7a7; flex: 0 0 3.5rem; text-align: right; }
+  .b-price { color: #aaa; flex: 0 0 3.5rem; text-align: right; }
+  .b-cat { color: #777; flex: 0 0 auto; font-size: 0.75rem; }
+  .sold-out .b-name { color: #884; text-decoration: line-through; }
+  .hidden .b-name { color: #668; text-decoration: line-through; }
+  .b-tag { font-size: 0.7rem; color: #88a; margin-left: 0.4rem; }
+  .warn-section { background: #2a2a1a; border: 1px solid #553; border-radius: 6px; padding: 0.75rem; margin-bottom: 1.5rem; }
+  .warn-section .section-head { color: #ca5; }
+  .orphan-section { background: #2a1a1a; border: 1px solid #533; border-radius: 6px; padding: 0.75rem; }
+  .orphan-section .section-head { color: #c55; }
+  .orphan-row { display: flex; gap: 0.5rem; padding: 3px 0; }
+  .orphan-cat { color: #e77; font-weight: 600; }
+  .ok { color: #5a5; font-style: italic; padding: 0.5rem 0; }
+  .stats { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .stat { background: #252525; border-radius: 4px; padding: 0.4rem 0.7rem; }
+  .stat b { color: #c8a96e; }
+  .error { color: #c55; padding: 2rem; text-align: center; }
+  .display-map { color: #888; font-size: 0.8rem; margin-bottom: 1.5rem; }
+  .display-map span { color: #aaa; }
+</style>
+</head>
+<body>
+
+<h1>Meander Menu &mdash; Sanity Check</h1>
+<div id="out"><p style="color:#888;">Loading sheets...</p></div>
+
+<script>
+const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv';
+const BEERS_URL   = SHEET_BASE + '&gid=0';
+const DISPLAY_URL = SHEET_BASE + '&gid=1651428800';
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = parseCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = parseCSVLine(line);
+    const row = {};
+    headers.forEach((h, i) => row[h.trim()] = (vals[i] || '').trim());
+    return row;
+  });
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuotes) {
+      if (c === '"' && line[i + 1] === '"') { current += '"'; i++; }
+      else if (c === '"') inQuotes = false;
+      else current += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { result.push(current); current = ''; }
+      else current += c;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function parseDisplay(text) {
+  const lines = text.trim().split('\n');
+  return lines
+    .map(line => parseCSVLine(line))
+    .filter(vals => {
+      const first = vals[0] || '';
+      return first && !first.startsWith('This defines') && !first.startsWith('Category group');
+    })
+    .map(vals => ({
+      heading: vals[0] || '',
+      categories: vals.slice(1).map(v => v.trim().toLowerCase()).filter(Boolean)
+    }));
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+document.addEventListener('DOMContentLoaded', () => {
+  Promise.all([
+    fetch(BEERS_URL).then(r => { if (!r.ok) throw new Error('Beers sheet: ' + r.status); return r.text(); }),
+    fetch(DISPLAY_URL).then(r => { if (!r.ok) throw new Error('Display sheet: ' + r.status); return r.text(); })
+  ])
+  .then(([beersCsv, displayCsv]) => {
+    const beers = parseCSV(beersCsv).filter(b => b.Name);
+    const groups = parseDisplay(displayCsv);
+
+    const allDisplayCats = new Set();
+    groups.forEach(g => g.categories.forEach(c => allDisplayCats.add(c)));
+
+    const mapped = new Set();
+    let totalOnMenu = 0;
+    let soldOutCount = 0;
+
+    let html = '';
+
+    // Stats
+    const activeBeerCount = beers.length;
+    const catSet = new Set(beers.map(b => (b.Category || '').trim().toLowerCase()).filter(Boolean));
+
+    // Display map
+    html += '<div class="display-map"><b>Display order:</b> ';
+    html += groups.map(g => '<span>' + esc(g.heading) + '</span> (' + g.categories.join(', ') + ')').join(' &rarr; ');
+    html += '</div>';
+
+    // Menu sections
+    for (const group of groups) {
+      const list = beers.filter(b => {
+        const cat = (b.Category || '').trim().toLowerCase();
+        return group.categories.includes(cat);
+      });
+
+      let hiddenCount = 0;
+      list.forEach(b => {
+        mapped.add(b.Name);
+        totalOnMenu++;
+        const st = (b.Status || '').toLowerCase();
+        if (st.includes('sold out')) soldOutCount++;
+        if (st === 'hide') hiddenCount++;
+      });
+
+      const visibleCount = list.length - hiddenCount;
+      html += '<div class="section"><div class="section-head">' + esc(group.heading) + ' (' + visibleCount + ' visible, ' + list.length + ' total)</div>';
+      if (list.length === 0) {
+        html += '<div style="color:#777;font-style:italic;padding:2px 0;">empty</div>';
+      }
+      list.forEach(beer => {
+        const st = (beer.Status || '').toLowerCase();
+        const so = st.includes('sold out');
+        const hi = st === 'hide';
+        const cls = hi ? ' hidden' : so ? ' sold-out' : '';
+        html += '<div class="beer-row' + cls + '">'
+          + '<span class="b-name">' + esc(beer.Name) + (hi ? '<span class="b-tag">(hidden)</span>' : '') + '</span>'
+          + '<span class="b-style">' + esc(beer.Style) + '</span>'
+          + '<span class="b-price">' + esc(beer.Price || '') + '</span>'
+          + '<span class="b-abv">' + esc(beer.ABV || '') + '</span>'
+          + '<span class="b-cat">' + esc(beer.Category || '?') + '</span>'
+          + '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Malformed prices
+    const priceRe = /^\$\d+\.\d{2}$/;
+    const badPrices = beers.filter(b => {
+      const p = (b.Price || '').trim();
+      return !p || !priceRe.test(p);
+    });
+    html += '<div class="warn-section"><div class="section-head">Malformed Prices (' + badPrices.length + ')</div>';
+    if (badPrices.length === 0) {
+      html += '<div class="ok">All prices look good ($X.XX format).</div>';
+    } else {
+      badPrices.forEach(beer => {
+        const p = (beer.Price || '').trim();
+        html += '<div class="beer-row">'
+          + '<span class="b-name">' + esc(beer.Name) + '</span>'
+          + '<span class="b-price" style="color:#e77;">' + (p ? esc(p) : '<em>empty</em>') + '</span>'
+          + '</div>';
+      });
+    }
+    html += '</div>';
+
+    // Empty sections (no visible beers after hiding)
+    const emptySections = groups.filter(g => {
+      const visible = beers.filter(b => {
+        const cat = (b.Category || '').trim().toLowerCase();
+        const st = (b.Status || '').toLowerCase();
+        return g.categories.includes(cat) && st !== 'hide';
+      });
+      return visible.length === 0;
+    });
+    html += '<div class="warn-section"><div class="section-head">Empty Sections (' + emptySections.length + ')</div>';
+    if (emptySections.length === 0) {
+      html += '<div class="ok">All display sections have at least one visible beer.</div>';
+    } else {
+      emptySections.forEach(g => {
+        const total = beers.filter(b => g.categories.includes((b.Category || '').trim().toLowerCase())).length;
+        html += '<div class="beer-row">'
+          + '<span class="b-name" style="color:#e77;">' + esc(g.heading) + '</span>'
+          + '<span class="b-tag" style="color:#ca5;">' + total + ' beer' + (total !== 1 ? 's' : '') + ' all hidden or none assigned</span>'
+          + '</div>';
+      });
+    }
+    html += '</div>';
+
+    // Orphans
+    const orphans = beers.filter(b => !mapped.has(b.Name));
+    html += '<div class="orphan-section"><div class="section-head">Orphans (' + orphans.length + ')</div>';
+    if (orphans.length === 0) {
+      html += '<div class="ok">No orphans. Every beer on the tap list appears on the menu.</div>';
+    } else {
+      orphans.forEach(beer => {
+        html += '<div class="orphan-row">'
+          + '<span class="b-name">' + esc(beer.Name) + '</span>'
+          + '<span class="b-style">' + esc(beer.Style) + '</span>'
+          + '<span class="orphan-cat">' + esc(beer.Category || '(no category)') + '</span>'
+          + '</div>';
+      });
+    }
+    html += '</div>';
+
+    // Stats bar at top
+    const statsHtml = '<div class="stats">'
+      + '<div class="stat"><b>' + activeBeerCount + '</b> beers on sheet</div>'
+      + '<div class="stat"><b>' + totalOnMenu + '</b> on menu</div>'
+      + '<div class="stat"><b>' + orphans.length + '</b> orphans</div>'
+      + '<div class="stat"><b>' + soldOutCount + '</b> sold out</div>'
+      + '<div class="stat"><b>' + groups.length + '</b> display groups</div>'
+      + '<div class="stat"><b>' + catSet.size + '</b> unique categories</div>'
+      + '<div class="stat"><b>' + badPrices.length + '</b> bad prices</div>'
+      + '<div class="stat"><b>' + beers.filter(b => (b.Status||'').toLowerCase() === 'hide').length + '</b> hidden</div>'
+      + '<div class="stat"><b>' + emptySections.length + '</b> empty sections</div>'
+      + '</div>';
+
+    document.getElementById('out').innerHTML = statsHtml + html
+      + '<div class="meta">Fetched ' + new Date().toLocaleString() + '</div>';
+  })
+  .catch(err => {
+    document.getElementById('out').innerHTML = '<p class="error">Failed to load: ' + esc(err.message) + '</p>';
+  });
+});
+</script>
+
+</body>
+</html>
