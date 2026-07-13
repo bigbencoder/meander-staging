@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Photos · Meander Brewing Co.</title>
+<meta name="description" content="Snapshots from the Meander Brewing Co. taproom, beer garden, and events in Buford, GA — pours, people, and good times.">
+<link rel="canonical" href="https://meander.benannaink.com/photos.html">
+<meta property="og:title" content="Photos — Meander Brewing Co.">
+<meta property="og:description" content="Snapshots from the Meander Brewing Co. taproom, beer garden, and events in Buford, GA.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meander.benannaink.com/photos.html">
+<meta property="og:image" content="https://meander.benannaink.com/images/community.jpg">
+<meta property="og:site_name" content="Meander Brewing Co.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="meander.css">
+<script src="flags.js"></script>
+<script src="sheet.js"></script>
+<style>
+  /* ===== Gallery grid ===== */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 12px;
+  }
+  .gallery-item {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: #13201a;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 1 / 1;
+    box-shadow: 0 2px 10px var(--card-shadow);
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s ease, opacity .4s ease;
+    opacity: 0;
+  }
+  .gallery-item img.loaded { opacity: 1; }
+  .gallery-item:hover img { transform: scale(1.06); }
+  .gallery-item .cap {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 1.4rem .8rem .7rem;
+    background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
+    color: #fff;
+    font-size: .82rem;
+    letter-spacing: .02em;
+    opacity: 0;
+    transition: opacity .3s ease;
+    pointer-events: none;
+  }
+  .gallery-item:hover .cap,
+  .gallery-item:focus-visible .cap { opacity: 1; }
+
+  .gallery-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 3rem 1rem;
+  }
+
+  /* skeleton shimmer while the sheet loads */
+  .gallery-skeleton {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 12px;
+  }
+  .gallery-skeleton .sk {
+    aspect-ratio: 1 / 1;
+    border-radius: 3px;
+    background: linear-gradient(100deg, #ece7de 30%, #f6f2ea 50%, #ece7de 70%);
+    background-size: 200% 100%;
+    animation: sk-shimmer 1.3s ease-in-out infinite;
+  }
+  @keyframes sk-shimmer { to { background-position: -200% 0; } }
+
+  /* ===== Lightbox ===== */
+  .lb {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(10, 14, 11, .94);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 3vh 3vw;
+  }
+  .lb.open { display: flex; }
+  .lb img {
+    max-width: 100%; max-height: 82vh;
+    object-fit: contain;
+    border-radius: 3px;
+    box-shadow: 0 10px 50px rgba(0,0,0,.6);
+  }
+  .lb-cap {
+    position: absolute; left: 0; right: 0; bottom: 3vh;
+    text-align: center; color: rgba(255,255,255,.85);
+    font-size: .95rem; padding: 0 1rem;
+  }
+  .lb-close, .lb-nav {
+    position: absolute; background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.25); color: #fff;
+    width: 46px; height: 46px; border-radius: 50%;
+    font-size: 1.4rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .lb-close:hover, .lb-nav:hover { background: rgba(255,255,255,.25); }
+  .lb-close { top: 3vh; right: 3vw; }
+  .lb-nav.prev { left: 3vw; top: 50%; transform: translateY(-50%); }
+  .lb-nav.next { right: 3vw; top: 50%; transform: translateY(-50%); }
+
+  /* ===== Contribute card ===== */
+  .contribute {
+    margin: 4rem auto 0;
+    max-width: 620px;
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2.4rem 1.8rem;
+    background: var(--paper);
+  }
+  .contribute h3 { margin-top: 0; }
+  .contribute p { color: var(--text-muted); font-size: .95rem; }
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="nav-toggle" aria-hidden="true">
+<header class="top">
+  <div class="top-inner">
+    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <label for="nav-toggle" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+</header>
+<div class="nav-overlay" role="dialog" aria-label="Site navigation">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="menu.html" class="nav-link">On Tap</a>
+  <a href="about.html" class="nav-link">About</a>
+  <a href="events.html" class="nav-link">Events</a>
+  <a href="photos.html" class="nav-link active">Photos</a>
+  <a href="visit.html" class="nav-link">Visit</a>
+  <div class="nav-sub">
+    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
+    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
+    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
+  </div>
+  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
+</div>
+
+<!-- ====== HERO BANNER ====== -->
+<div class="img-break" style="min-height: 40vh; height: 40vh;">
+  <img loading="lazy" src="images/community.jpg" alt="Friends in the Meander beer garden">
+  <div class="img-break-overlay">
+    <div class="img-break-text">
+      <span class="eyebrow">Life at Meander</span>
+      <h1 style="font-size: clamp(2.4rem, 5vw, 4rem);">Photos</h1>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="tagline center reveal" style="margin: 0 auto 3rem; max-width: 56ch;">
+      Pours, people, patio dogs, and the odd perfect sunset over the beer garden. A rolling look at life at the taproom.
+    </p>
+
+    <!-- Gallery populated from the Photos sheet tab -->
+    <div id="gallery" class="gallery-skeleton" aria-live="polite">
+      <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+      <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+    </div>
+
+    <!-- ===== Contribute / upload affordance (see script note below) ===== -->
+    <div class="contribute reveal">
+      <h3>Got a great shot?</h3>
+      <p>Staff and regulars — share your favorite Meander moment and it may show up right here on the wall.</p>
+      <a id="contribute-link" class="btn filled" href="#" target="_blank" rel="noopener">Submit a Photo</a>
+      <p style="margin-bottom:0; margin-top:1.2rem; font-size:.82rem;">Photos are reviewed before they appear.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== LIGHTBOX ====== -->
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+  <button class="lb-nav prev" id="lb-prev" aria-label="Previous photo">&#8249;</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-nav next" id="lb-next" aria-label="Next photo">&#8250;</button>
+  <div class="lb-cap" id="lb-cap"></div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="brand">Meander<span class="sub">Brewing Co.</span></div>
+      <p style="color: rgba(255,255,255,.6); font-size: .92rem; margin-top: 1rem; max-width: 36ch;">
+        110 E. Moreno St., Buford, GA 30518<br>
+        (678) 765-8133
+      </p>
+    </div>
+    <div class="foot-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="menu.html">On Tap</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="visit.html">Visit</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="https://www.instagram.com/meanderbrewingco/">Instagram</a></li>
+        <li><a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a></li>
+        <li><a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <span>&copy; 2026 Meander Brewing Co. · Buford, GA</span>
+    <span>Please drink responsibly. Must be 21+.</span>
+  </div>
+</footer>
+
+<script>
+/* =========================================================================
+   PHOTOS GALLERY  —  data source
+   -------------------------------------------------------------------------
+   Renders from a "Photos" tab on the same published Google Sheet the rest of
+   the site uses (via sheet.js / MeanderSheet). This keeps the gallery on the
+   exact same Sheets-as-CMS pattern as the menu, hours, and FAQ.
+
+   >>> TODO (Ben, to wire for production): set PHOTOS_GID to the gid of a new
+       "Photos" tab in the Meander Google Sheet
+       (docs.google.com/spreadsheets/d/e/2PACX-1vTM.../pub — the SHEET_BASE in
+       sheet.js). Publish that tab to the web (File > Share > Publish to web),
+       same as the existing tabs.
+
+   Expected columns (header row; extra columns are ignored):
+       Image    - a direct, hot-linkable image URL (see note on hosting below)
+       Caption  - optional short caption shown on hover + in the lightbox
+       Credit   - optional "photo by ..." credit, appended to the caption
+       Status   - optional; a row is hidden if this is "hide"
+
+   IMAGE HOSTING NOTE: the URL in the Image column must be directly embeddable
+   (<img src>). Google Drive "share" links are NOT directly embeddable and will
+   fail. Good options: files committed to this repo under images/gallery/, an
+   Instagram/CDN direct URL, Cloudinary, or an imgur direct link. Simplest and
+   most self-contained: commit photos to images/gallery/ and put a relative
+   path like "images/gallery/patio-sunset.jpg" in the Image column.
+
+   Until PHOTOS_GID is set, the gallery falls back to a small built-in seed set
+   drawn from images already in the repo, so the page always renders something.
+   ========================================================================= */
+(function () {
+  var PHOTOS_GID = null;   // <-- TODO: set to the published "Photos" tab gid
+
+  // Fallback seed so the prototype renders before the sheet tab exists.
+  var SEED = [
+    { Image: 'images/community.jpg',  Caption: 'Good times in the beer garden' },
+    { Image: 'images/taproom1.jpg',   Caption: 'Cheers from the taproom' },
+    { Image: 'images/taproom2.jpg',   Caption: 'Fresh hops, fresh pours' },
+    { Image: 'images/dog-photo.jpg',  Caption: 'A very good patio regular' },
+    { Image: 'images/about.jpg',      Caption: 'Where the beer happens' },
+    { Image: 'images/hero.jpg',       Caption: 'Meander Brewing Co., Buford GA' }
+  ];
+
+  var grid = document.getElementById('gallery');
+  var photos = [];   // the rendered set, used by the lightbox
+
+  function render(rows) {
+    // normalize + filter
+    photos = rows
+      .map(function (r) {
+        return {
+          src: (r.Image || r.image || r.URL || r.url || '').trim(),
+          caption: (r.Caption || r.caption || '').trim(),
+          credit: (r.Credit || r.credit || '').trim(),
+          status: (r.Status || r.status || '').trim().toLowerCase()
+        };
+      })
+      .filter(function (p) { return p.src && p.status !== 'hide'; });
+
+    grid.className = 'gallery';
+
+    if (!photos.length) {
+      grid.innerHTML = '<p class="gallery-empty">No photos yet — check back soon.</p>';
+      return;
+    }
+
+    grid.innerHTML = photos.map(function (p, i) {
+      var cap = p.caption;
+      if (p.credit) cap += (cap ? ' — ' : '') + p.credit;
+      var capHtml = cap ? '<span class="cap">' + MeanderSheet.esc(cap) + '</span>' : '';
+      var alt = MeanderSheet.esc(p.caption || 'Meander Brewing Co. photo');
+      return '<button class="gallery-item reveal" data-i="' + i + '" aria-label="' + alt + '">' +
+               '<img loading="lazy" src="' + MeanderSheet.esc(p.src) + '" alt="' + alt + '">' +
+               capHtml +
+             '</button>';
+    }).join('');
+
+    // fade images in as they decode; drop any that fail to load
+    grid.querySelectorAll('.gallery-item img').forEach(function (img) {
+      if (img.complete && img.naturalWidth) img.classList.add('loaded');
+      img.addEventListener('load', function () { img.classList.add('loaded'); });
+      img.addEventListener('error', function () {
+        var btn = img.closest('.gallery-item');
+        if (btn) btn.style.display = 'none';
+      });
+    });
+
+    // reveal-on-scroll, matching the rest of the site
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+    grid.querySelectorAll('.reveal').forEach(function (el) { obs.observe(el); });
+  }
+
+  // Prefer the live sheet tab; fall back to the seed set on any failure.
+  if (PHOTOS_GID != null && window.MeanderSheet) {
+    MeanderSheet.fetchTab(PHOTOS_GID, 'Image')
+      .then(function (rows) { render(rows && rows.length ? rows : SEED); })
+      .catch(function () { render(SEED); });
+  } else {
+    render(SEED);
+  }
+
+  /* ===== Lightbox ===== */
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbCap = document.getElementById('lb-cap');
+  var cur = 0;
+
+  function show(i) {
+    if (!photos.length) return;
+    cur = (i + photos.length) % photos.length;
+    var p = photos[cur];
+    lbImg.src = p.src;
+    lbImg.alt = p.caption || 'Meander Brewing Co. photo';
+    var cap = p.caption;
+    if (p.credit) cap += (cap ? ' — ' : '') + p.credit;
+    lbCap.textContent = cap || '';
+  }
+  function open(i) { show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+
+  grid.addEventListener('click', function (e) {
+    var btn = e.target.closest('.gallery-item');
+    if (btn) open(parseInt(btn.getAttribute('data-i'), 10) || 0);
+  });
+  document.getElementById('lb-close').addEventListener('click', close);
+  document.getElementById('lb-prev').addEventListener('click', function () { show(cur - 1); });
+  document.getElementById('lb-next').addEventListener('click', function () { show(cur + 1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') show(cur - 1);
+    else if (e.key === 'ArrowRight') show(cur + 1);
+  });
+})();
+
+/* =========================================================================
+   UPLOAD / "Submit a Photo"  —  prototype stub
+   -------------------------------------------------------------------------
+   A static GitHub-Pages site has no upload backend, so the prototype wires the
+   "Submit a Photo" button to a Google Form. This is the lightest path that
+   matches how the site already uses Google as its CMS:
+
+     staff opens Google Form -> uploads a photo (Form "File upload" question,
+     stored in the brewery's Google Drive) + optional caption
+        -> responses land in a linked Google Sheet
+        -> Ben/owner reviews, then adds an approved row (Image URL + Caption)
+           to the published "Photos" tab this page reads.
+
+   >>> TODO (Ben, to wire for production):
+     1. Create a Google Form with: File upload (images only, 1 file) + a short
+        "Caption" text field + optional "Your name" (for Credit). File-upload
+        Forms require sign-in, which is fine for staff.
+     2. Set CONTRIBUTE_FORM_URL below to that form's share link.
+     3. Decide the review->publish step: manually copy an approved image into
+        images/gallery/ (most self-contained) OR host it and paste a direct URL
+        into the Photos tab's Image column.
+
+   RECOMMENDED PRODUCTION APPROACH (hardened, still no droplet): the flow in
+   webMasterDev/meander-image-upload-PLAN.md — Cloudflare Access (email OTP,
+   staff allowlist) in front of a small uploader page + a Cloudflare Worker
+   that validates the image and commits it to the repo via the GitHub Contents
+   API. That removes the manual review-copy step and keeps everything on
+   Cloudflare + GitHub. The Google Form path here is the zero-code prototype;
+   the Worker path is the intended v1.
+   ========================================================================= */
+(function () {
+  var CONTRIBUTE_FORM_URL = null;  // <-- TODO: set to the Google Form share URL
+  var link = document.getElementById('contribute-link');
+  if (CONTRIBUTE_FORM_URL) {
+    link.href = CONTRIBUTE_FORM_URL;
+  } else {
+    // No form wired yet: keep the affordance visible but make the stub explicit.
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      alert('Photo submissions are coming soon. For now, email your photo to hello@meanderbrewingco.com or tag us on Instagram @meanderbrewingco.');
+    });
+  }
+})();
+</script>
+
+<script>
+/* shared header + nav behavior, same as the other pages */
+document.addEventListener('DOMContentLoaded', function () {
+  var header = document.querySelector('.top');
+  window.addEventListener('scroll', function () {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+  document.querySelectorAll('.nav-overlay .nav-link').forEach(function (link) {
+    link.addEventListener('click', function () { document.getElementById('nav-toggle').checked = false; });
+  });
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal, .img-break').forEach(function (el) { obs.observe(el); });
+});
+</script>
+
+</body>
+</html>
