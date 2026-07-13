@@ -44,9 +44,17 @@
   }
 
   function esc(str) {
-    var d = document.createElement('div');
-    d.textContent = str == null ? '' : str;
-    return d.innerHTML;
+    // Escape for BOTH text and attribute contexts. The old textContent->innerHTML
+    // round-trip only encoded & < > and left " ' raw, which allowed attribute
+    // breakout (e.g. a caption of  x" onload="...  injecting an event handler when
+    // interpolated into alt="..."). Escaping quotes too closes that across every
+    // sheet-driven page.
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   // escape text, then turn any http(s) URLs into clickable links (injection-safe)
