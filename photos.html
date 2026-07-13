@@ -186,9 +186,9 @@
     <!-- ===== Contribute / upload affordance (see script note below) ===== -->
     <div class="contribute reveal">
       <h3>Got a great shot?</h3>
-      <p>Staff and regulars — share your favorite Meander moment and it may show up right here on the wall.</p>
-      <a id="contribute-link" class="btn filled" href="#" target="_blank" rel="noopener">Submit a Photo</a>
-      <p style="margin-bottom:0; margin-top:1.2rem; font-size:.82rem;">Photos are reviewed before they appear.</p>
+      <p>Meander staff — add a favorite taproom moment straight to the wall using the photo uploader.</p>
+      <a id="contribute-link" class="btn filled" href="#" target="_blank" rel="noopener">Open the Uploader</a>
+      <p style="margin-bottom:0; margin-top:1.2rem; font-size:.82rem;">Staff sign-in required.</p>
     </div>
   </div>
 </section>
@@ -240,60 +240,65 @@
 /* =========================================================================
    PHOTOS GALLERY  —  data source
    -------------------------------------------------------------------------
-   Renders from a "Photos" tab on the same published Google Sheet the rest of
-   the site uses (via sheet.js / MeanderSheet). This keeps the gallery on the
-   exact same Sheets-as-CMS pattern as the menu, hours, and FAQ.
+   Renders from images/gallery/manifest.json — the same manifest the beer-photo
+   uploader's Cloudflare Worker maintains. Each gallery upload (uploader page in
+   "Gallery photo" mode) commits images/gallery/<generated>.jpg to the site repo
+   AND appends {file, caption, credit, uploadedAt} to that manifest. This page
+   just fetches the manifest and maps it into the grid — no Google Sheet needed.
 
-   >>> TODO (Ben, to wire for production): set PHOTOS_GID to the gid of a new
-       "Photos" tab in the Meander Google Sheet
-       (docs.google.com/spreadsheets/d/e/2PACX-1vTM.../pub — the SHEET_BASE in
-       sheet.js). Publish that tab to the web (File > Share > Publish to web),
-       same as the existing tabs.
-
-   Expected columns (header row; extra columns are ignored):
-       Image    - a direct, hot-linkable image URL (see note on hosting below)
-       Caption  - optional short caption shown on hover + in the lightbox
-       Credit   - optional "photo by ..." credit, appended to the caption
-       Status   - optional; a row is hidden if this is "hide"
-
-   IMAGE HOSTING NOTE: the URL in the Image column must be directly embeddable
-   (<img src>). Google Drive "share" links are NOT directly embeddable and will
-   fail. Good options: files committed to this repo under images/gallery/, an
-   Instagram/CDN direct URL, Cloudinary, or an imgur direct link. Simplest and
-   most self-contained: commit photos to images/gallery/ and put a relative
-   path like "images/gallery/patio-sunset.jpg" in the Image column.
-
-   Until PHOTOS_GID is set, the gallery falls back to a small built-in seed set
-   drawn from images already in the repo, so the page always renders something.
+   >>> REPO RECONCILIATION (Ben must confirm — do not assume):
+       The uploader Worker (meander-upload) commits to GITHUB_REPO =
+       bigbencoder/meander-brewing (the PRODUCTION repo, served at
+       meander.benannaink.com), exactly like the existing images/beers photos.
+       This photos.html currently lives on the meander-STAGING repo
+       (feature/photos-gallery). So:
+         - GALLERY_ORIGIN = ''  (default, relative): the manifest + images
+           resolve against whatever host serves THIS page. They only exist once
+           photos.html is promoted into meander-brewing (prod) alongside
+           images/gallery/. On a staging preview host the fetch 404s and the
+           seed set below renders instead.
+         - To preview the REAL uploaded gallery from staging without promoting,
+           set GALLERY_ORIGIN = 'https://meander.benannaink.com' — this pulls
+           the live prod manifest + images cross-origin (GitHub Pages serves
+           permissive CORS for static assets).
+       Bottom line: gallery images + manifest live in meander-brewing (prod).
+       Keep the uploader pointed there (it already is), and either promote
+       photos.html to prod or set GALLERY_ORIGIN to the prod origin for staging.
    ========================================================================= */
 (function () {
-  var PHOTOS_GID = null;   // <-- TODO: set to the published "Photos" tab gid
+  var GALLERY_ORIGIN = '';   // '' = relative/same-origin. Set to prod origin to preview from staging.
+  var GALLERY_DIR = 'images/gallery/';
+  var MANIFEST_URL = (GALLERY_ORIGIN ? GALLERY_ORIGIN.replace(/\/$/, '') + '/' : '') + GALLERY_DIR + 'manifest.json';
 
-  // Fallback seed so the prototype renders before the sheet tab exists.
+  // Fallback seed so the page always renders when the manifest is absent/empty
+  // (e.g. on a staging host, or before the first gallery upload).
   var SEED = [
-    { Image: 'images/community.jpg',  Caption: 'Good times in the beer garden' },
-    { Image: 'images/taproom1.jpg',   Caption: 'Cheers from the taproom' },
-    { Image: 'images/taproom2.jpg',   Caption: 'Fresh hops, fresh pours' },
-    { Image: 'images/dog-photo.jpg',  Caption: 'A very good patio regular' },
-    { Image: 'images/about.jpg',      Caption: 'Where the beer happens' },
-    { Image: 'images/hero.jpg',       Caption: 'Meander Brewing Co., Buford GA' }
+    { src: 'images/community.jpg', caption: 'Good times in the beer garden' },
+    { src: 'images/taproom1.jpg',  caption: 'Cheers from the taproom' },
+    { src: 'images/taproom2.jpg',  caption: 'Fresh hops, fresh pours' },
+    { src: 'images/dog-photo.jpg', caption: 'A very good patio regular' },
+    { src: 'images/about.jpg',     caption: 'Where the beer happens' },
+    { src: 'images/hero.jpg',      caption: 'Meander Brewing Co., Buford GA' }
   ];
+
+  // Map manifest entries -> the normalized shape render() expects. Newest first.
+  function fromManifest(entries) {
+    return entries.slice().reverse().map(function (e) {
+      var file = (e.file || '').trim();
+      return {
+        src: file ? ((GALLERY_ORIGIN ? GALLERY_ORIGIN.replace(/\/$/, '') + '/' : '') + GALLERY_DIR + file) : '',
+        caption: (e.caption || '').trim(),
+        credit: (e.credit || '').trim()
+      };
+    });
+  }
 
   var grid = document.getElementById('gallery');
   var photos = [];   // the rendered set, used by the lightbox
 
-  function render(rows) {
-    // normalize + filter
-    photos = rows
-      .map(function (r) {
-        return {
-          src: (r.Image || r.image || r.URL || r.url || '').trim(),
-          caption: (r.Caption || r.caption || '').trim(),
-          credit: (r.Credit || r.credit || '').trim(),
-          status: (r.Status || r.status || '').trim().toLowerCase()
-        };
-      })
-      .filter(function (p) { return p.src && p.status !== 'hide'; });
+  // render() takes already-normalized { src, caption, credit } objects.
+  function render(items) {
+    photos = (items || []).filter(function (p) { return p && p.src; });
 
     grid.className = 'gallery';
 
@@ -330,14 +335,15 @@
     grid.querySelectorAll('.reveal').forEach(function (el) { obs.observe(el); });
   }
 
-  // Prefer the live sheet tab; fall back to the seed set on any failure.
-  if (PHOTOS_GID != null && window.MeanderSheet) {
-    MeanderSheet.fetchTab(PHOTOS_GID, 'Image')
-      .then(function (rows) { render(rows && rows.length ? rows : SEED); })
-      .catch(function () { render(SEED); });
-  } else {
-    render(SEED);
-  }
+  // Prefer the live manifest; fall back to the seed set when it's absent/empty.
+  fetch(MANIFEST_URL, { cache: 'no-store' })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (data) {
+      var entries = Array.isArray(data) ? data : (data && Array.isArray(data.photos) ? data.photos : []);
+      var mapped = fromManifest(entries);
+      render(mapped.length ? mapped : SEED);
+    })
+    .catch(function () { render(SEED); });
 
   /* ===== Lightbox ===== */
   var lb = document.getElementById('lightbox');
@@ -375,45 +381,31 @@
 })();
 
 /* =========================================================================
-   UPLOAD / "Submit a Photo"  —  prototype stub
+   UPLOAD / "Submit a Photo"
    -------------------------------------------------------------------------
-   A static GitHub-Pages site has no upload backend, so the prototype wires the
-   "Submit a Photo" button to a Google Form. This is the lightest path that
-   matches how the site already uses Google as its CMS:
+   Reuses the EXISTING beer-photo uploader (Cloudflare Pages project
+   "meander-upload"), which now has a "Gallery photo" mode. Staff open the
+   uploader, log in via Cloudflare Access (email OTP), pick "Gallery photo",
+   optionally add a caption/credit, and the Worker commits the image +
+   updates images/gallery/manifest.json — which this page reads. No separate
+   form, no manual copy step.
 
-     staff opens Google Form -> uploads a photo (Form "File upload" question,
-     stored in the brewery's Google Drive) + optional caption
-        -> responses land in a linked Google Sheet
-        -> Ben/owner reviews, then adds an approved row (Image URL + Caption)
-           to the published "Photos" tab this page reads.
-
-   >>> TODO (Ben, to wire for production):
-     1. Create a Google Form with: File upload (images only, 1 file) + a short
-        "Caption" text field + optional "Your name" (for Credit). File-upload
-        Forms require sign-in, which is fine for staff.
-     2. Set CONTRIBUTE_FORM_URL below to that form's share link.
-     3. Decide the review->publish step: manually copy an approved image into
-        images/gallery/ (most self-contained) OR host it and paste a direct URL
-        into the Photos tab's Image column.
-
-   RECOMMENDED PRODUCTION APPROACH (hardened, still no droplet): the flow in
-   webMasterDev/meander-image-upload-PLAN.md — Cloudflare Access (email OTP,
-   staff allowlist) in front of a small uploader page + a Cloudflare Worker
-   that validates the image and commits it to the repo via the GitHub Contents
-   API. That removes the manual review-copy step and keeps everything on
-   Cloudflare + GitHub. The Google Form path here is the zero-code prototype;
-   the Worker path is the intended v1.
+   >>> TODO (Ben, to wire for production): set UPLOADER_URL to the deployed
+       uploader hostname (per meander-upload/README.md this is the Cloudflare
+       Pages URL, e.g. https://meander-upload.pages.dev). It's Access-gated, so
+       only allowlisted staff can actually upload. Leave null and the button
+       shows a friendly "coming soon" note instead.
    ========================================================================= */
 (function () {
-  var CONTRIBUTE_FORM_URL = null;  // <-- TODO: set to the Google Form share URL
+  var UPLOADER_URL = null;  // <-- TODO: set to https://meander-upload.pages.dev (Access-gated)
   var link = document.getElementById('contribute-link');
-  if (CONTRIBUTE_FORM_URL) {
-    link.href = CONTRIBUTE_FORM_URL;
+  if (UPLOADER_URL) {
+    link.href = UPLOADER_URL;
   } else {
-    // No form wired yet: keep the affordance visible but make the stub explicit.
+    // Uploader URL not wired yet: keep the affordance visible but explicit.
     link.addEventListener('click', function (e) {
       e.preventDefault();
-      alert('Photo submissions are coming soon. For now, email your photo to hello@meanderbrewingco.com or tag us on Instagram @meanderbrewingco.');
+      alert('Photo submissions are coming soon. Staff: the uploader (Gallery mode) goes live once it is deployed. For now, email your photo to hello@meanderbrewingco.com or tag us on Instagram @meanderbrewingco.');
     });
   }
 })();
