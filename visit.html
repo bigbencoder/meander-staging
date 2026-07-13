@@ -20,15 +20,6 @@
 <link rel="stylesheet" href="meander.css">
 <script src="flags.js"></script>
 <script src="sheet.js"></script>
-<style>
-  .faq-list { max-width: 760px; margin: 0 auto; }
-  .faq { border-top: 1px solid var(--line); padding: 1.4rem 0; }
-  .faq:last-child { border-bottom: 1px solid var(--line); }
-  .faq-q { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 1.15rem; letter-spacing: .3px; margin-bottom: .5rem; }
-  .faq-a { color: var(--text-muted); line-height: 1.65; }
-  .faq-a a { color: var(--green-primary); text-decoration: underline; word-break: break-word; }
-  .faq-links { margin-top: .5rem; font-size: .9rem; }
-</style>
 </head>
 <body>
 
@@ -48,6 +39,7 @@
   <a href="events.html" class="nav-link">Events</a>
   <a href="photos.html" class="nav-link">Photos</a>
   <a href="visit.html" class="nav-link active">Visit</a>
+  <a href="faq.html" class="nav-link">FAQ</a>
   <div class="nav-sub">
     <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
     <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
@@ -147,11 +139,6 @@
         <p>No kitchen on site — but Italian Pie is right next door and delivers to the taproom. Outside food is always welcome too.</p>
       </div>
     </div>
-
-    <div id="faq-section" style="margin-top: 4.5rem; display:none;" class="reveal">
-      <h2 class="cat-header" style="justify-content:center; text-align:center;">Frequently Asked</h2>
-      <div id="faq-list" class="faq-list"></div>
-    </div>
   </div>
 </section>
 
@@ -183,6 +170,7 @@
         <li><a href="events.html">Events</a></li>
         <li><a href="photos.html">Photos</a></li>
         <li><a href="visit.html">Visit</a></li>
+        <li><a href="faq.html">FAQ</a></li>
       </ul>
     </div>
     <div class="foot-col">
@@ -218,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', function () {
   /* === Google Sheet tab gids === */
   var HOURS_GID = 43882215;    /* Hours tab */
-  var FAQ_GID   = 1629458348;  /* FAQs tab  */
 
   /* Hours: replace the static table on success; static rows remain a fallback */
   if (HOURS_GID != null && window.MeanderSheet) {
@@ -235,32 +222,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       if (html) table.innerHTML = html;
     }).catch(function () { /* keep the static fallback table */ });
-  }
-
-  /* FAQ: reveal + populate the section on success; stay hidden otherwise */
-  var faqSection = document.getElementById('faq-section');
-  if (FAQ_GID != null && window.MeanderSheet) {
-    MeanderSheet.fetchTab(FAQ_GID, 'Question').then(function (rows) {
-      var list = document.getElementById('faq-list');
-      var items = rows.filter(function (r) { return (r.Question || r.question || '').trim(); });
-      if (!list || !items.length) return;
-      list.innerHTML = items.map(function (r) {
-        var q = r.Question || r.question || '';
-        var a = r.Answer || r.answer || '';
-        var urls = (r.URLs || r.Urls || r.urls || '').trim();
-        var answerHtml = MeanderSheet.linkify(a);
-        if (urls) {
-          var extra = urls.split(/[\s,]+/).filter(Boolean).filter(function (u) { return a.indexOf(u) === -1; });
-          if (extra.length) {
-            answerHtml += '<div class="faq-links">' + extra.map(function (u) {
-              return '<a href="' + MeanderSheet.esc(u) + '" target="_blank" rel="noopener">' + MeanderSheet.esc(u) + '</a>';
-            }).join(' &middot; ') + '</div>';
-          }
-        }
-        return '<div class="faq"><div class="faq-q">' + MeanderSheet.esc(q) + '</div><div class="faq-a">' + answerHtml + '</div></div>';
-      }).join('');
-      if (faqSection) { faqSection.style.display = ''; faqSection.classList.add('visible'); }
-    }).catch(function () { /* stay hidden */ });
   }
 });
 </script>
