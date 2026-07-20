@@ -36,7 +36,9 @@
   <a href="menu.html" class="nav-link">On Tap</a>
   <a href="about.html" class="nav-link">About</a>
   <a href="events.html" class="nav-link active">Events</a>
+  <a href="photos.html" class="nav-link">Photos</a>
   <a href="visit.html" class="nav-link">Visit</a>
+  <a href="faq.html" class="nav-link">FAQ</a>
   <div class="nav-sub">
     <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
     <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
@@ -90,7 +92,9 @@
         <li><a href="menu.html">On Tap</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
+        <li><a href="photos.html">Photos</a></li>
         <li><a href="visit.html">Visit</a></li>
+        <li><a href="faq.html">FAQ</a></li>
       </ul>
     </div>
     <div class="foot-col">
@@ -206,17 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.nav-overlay .nav-link').forEach(link => {
     link.addEventListener('click', () => { document.getElementById('nav-toggle').checked = false; });
   });
-
-  // ── Feature flag: on staging, show "Coming Soon" instead of the calendar ─────
-  if (window.MEANDER_FLAGS && window.MEANDER_FLAGS.eventsComingSoon) {
-    document.getElementById('events-root').innerHTML =
-      '<div style="text-align:center;padding:2rem 0;">' +
-        '<h2 class="cat-header reveal" style="justify-content:center;">Events &mdash; Coming Soon</h2>' +
-        '<p class="tagline center reveal" style="margin:1.25rem auto 0;max-width:46ch;">Our events calendar is on its way. Check back soon &mdash; or follow us on <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> for what\'s happening at the taproom.</p>' +
-      '</div>';
-    observeReveals();
-    return;
-  }
 
   // ── Events loading ──────────────────────────────────────────────────────────
   // Fetch the published "Events" tab CSV directly from Google Sheets each load,

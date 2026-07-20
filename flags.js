@@ -6,7 +6,11 @@
 (function () {
   var PROD_HOSTS = [
     'meanderbrewingco.com',
-    'www.meanderbrewingco.com'
+    'www.meanderbrewingco.com',
+    // meander.benannaink.com is the CURRENT canonical production host — the real
+    // domain gets pointed here later. Without it listed, this file would noindex
+    // live production and show "Coming Soon" on its events page.
+    'meander.benannaink.com'
     // ^ the real customer-facing domain (launching later). It's the only host
     //   that should show live content and be indexable.
   ];
