@@ -11,8 +11,9 @@
     // domain gets pointed here later. Without it listed, this file would noindex
     // live production and show "Coming Soon" on its events page.
     'meander.benannaink.com'
-    // ^ the real customer-facing domain (launching later). It's the only host
-    //   that should show live content and be indexable.
+    // ^ the hosts above are the ones that show live content and are indexable.
+    //   meanderbrewingco.com is the real customer-facing domain (launching
+    //   later); benannaink is where production lives until it is pointed here.
   ];
   var isProd = PROD_HOSTS.indexOf(location.hostname) !== -1;
   window.MEANDER_ENV = isProd ? 'prod' : 'staging';
