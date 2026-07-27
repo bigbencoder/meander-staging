@@ -1,5 +1,22 @@
-User-agent: *
-Allow: /
-Disallow: /sanity.html
+# meanderbeercompany.com — TEST DEPLOY, not the customer's site.
+#
+# Production is https://meander.benannaink.com (the meander-brewing repo).
+# This host exists only so the domain is not squatted, and must stay out of
+# search results so it never competes with production as duplicate content.
+#
+# Why Disallow rather than Allow-plus-noindex: the noindex on this host is
+# injected at runtime by flags.js, so ONLY JS-rendering crawlers ever see it.
+# A non-rendering crawler that is allowed to fetch will index the duplicate.
+# Blocking the fetch outright is the strongest signal available on GitHub
+# Pages, which cannot send an X-Robots-Tag header.
+#
+# The previous version of this file said "Allow: /" AND advertised
+# PRODUCTION's sitemap from this host — both copied artifacts of the
+# 2026-07-19 file-by-file reconcile.
+#
+# ⚠️ DO NOT COPY THIS FILE TO meander-brewing. It would deindex the live
+# customer site. robots.txt and sitemap.xml are per-host and must diverge;
+# they are the two files a reconcile must never carry across in either direction.
 
-Sitemap: https://meander.benannaink.com/sitemap.xml
+User-agent: *
+Disallow: /
