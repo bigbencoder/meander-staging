@@ -24,6 +24,10 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* 2026-10-16 audit: sections that slide in from the right (.reveal-right) sit up to ~36px off-screen until
+   revealed. body's overflow-x: hidden already stops sideways scrolling in Chromium, but iOS Safari can ignore it
+   on body for touch swipes; clipping on the root too keeps phones from wiggling sideways. */
+html { overflow-x: clip; }
 html, body { margin: 0; padding: 0; }
 
 body {
