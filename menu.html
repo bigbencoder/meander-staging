@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="meander.css">
+<link rel="stylesheet" href="meander.css?v=20261015b">
 <style>
   .beer.sold-out { opacity: 0.45; }
   .beer.sold-out .beer-name::after {
@@ -77,13 +77,49 @@
   }
 </style>
 <script src="flags.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Brewery",
+  "@id": "https://meander.benannaink.com/#brewery",
+  "name": "Meander Brewing Co.",
+  "description": "Craft brewery and taproom in historic downtown Buford, Georgia. 20+ beers on tap, kid and dog friendly, locally sourced ingredients. Est. 2024.",
+  "url": "https://meander.benannaink.com/",
+  "telephone": "+16787658133",
+  "email": "meanderbrewingco@gmail.com",
+  "foundingDate": "2024",
+  "priceRange": "$$",
+  "servesCuisine": "Craft Beer",
+  "menu": "https://meander.benannaink.com/menu.html",
+  "image": "https://meander.benannaink.com/images/hero.jpg",
+  "logo": "https://meander.benannaink.com/images/logo3.png",
+  "hasMap": "https://www.google.com/maps/search/?api=1&query=Meander+Brewing+Co+110+E+Moreno+St+Buford+GA",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "110 E. Moreno St.",
+    "addressLocality": "Buford",
+    "addressRegion": "GA",
+    "postalCode": "30518",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 34.1203,
+    "longitude": -84.0038
+  },
+  "sameAs": [
+    "https://www.instagram.com/meanderbrewingco/",
+    "https://www.facebook.com/profile.php?id=61561907513937"
+  ]
+}
+</script>
 </head>
 <body>
 
 <input type="checkbox" id="nav-toggle" aria-hidden="true">
 <header class="top">
   <div class="top-inner">
-    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <a href="index.html" class="brand brand-has-logo" aria-label="Meander Brewing Co. home"><img src="images/logo-header.png" alt="Meander Brewing Co." class="brand-logo" width="192" height="128"></a>
     <label for="nav-toggle" class="hamburger" aria-label="Open menu">
       <span></span><span></span><span></span>
     </label>
@@ -92,17 +128,11 @@
 <div class="nav-overlay" role="dialog" aria-label="Site navigation">
   <a href="index.html" class="nav-link">Home</a>
   <a href="menu.html" class="nav-link active">On Tap</a>
-  <a href="about.html" class="nav-link">About</a>
+  <a href="about.html" class="nav-link">About Us</a>
   <a href="events.html" class="nav-link">Events</a>
   <a href="photos.html" class="nav-link">Photos</a>
   <a href="visit.html" class="nav-link">Visit</a>
   <a href="faq.html" class="nav-link">FAQ</a>
-  <div class="nav-sub">
-    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
-    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
-    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
-  </div>
-  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
 </div>
 
 <!-- ====== HERO BANNER ====== -->
@@ -116,10 +146,10 @@
   </div>
 </div>
 
-<section>
+<!-- Client (2026-09-28): trimmed the space under the banner. The tagline that sat here was a .reveal element outside
+     #beer-menu, which is the only place this page's observer looks, so it never faded in: an invisible block. -->
+<section style="padding-top: 1.5rem;">
   <div class="wrap">
-    <p class="tagline center reveal" style="margin: 0 auto 3rem; max-width: 56ch;">Up to 20 beers pouring at any given time. Flights are always welcome. Availability rotates — if something sold out last visit, check back this week.</p>
-
     <!-- Beer list populated from Google Sheets -->
     <div id="beer-menu"></div>
 
@@ -143,7 +173,7 @@
       <h5>Explore</h5>
       <ul>
         <li><a href="menu.html">On Tap</a></li>
-        <li><a href="about.html">About</a></li>
+        <li><a href="about.html">About Us</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="photos.html">Photos</a></li>
         <li><a href="visit.html">Visit</a></li>
@@ -164,6 +194,20 @@
     <span>Please drink responsibly. Must be 21+.</span>
   </div>
 </footer>
+
+<div class="beer-lightbox" id="beer-lightbox" hidden role="dialog" aria-modal="true" aria-label="Beer photo">
+  <div class="blb-card">
+    <button class="blb-close" id="blb-close" aria-label="Close">&times;</button>
+    <img id="blb-img" alt="">
+    <div class="blb-body">
+      <div class="blb-name" id="blb-name"></div>
+      <div class="blb-style" id="blb-style"></div>
+      <div class="blb-abv" id="blb-abv"></div>
+      <div class="blb-desc" id="blb-desc"></div>
+      <div class="blb-soldout" id="blb-soldout" hidden>Sold Out</div>
+    </div>
+  </div>
+</div>
 
 <script>
 const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv';
@@ -229,6 +273,21 @@ function esc(str) {
   return d.innerHTML;
 }
 
+/* Beer photo convention, shared with qr.html and the uploader:
+   images/beers/<slug-of-name>.jpg. Renaming a beer in the sheet orphans its
+   photo -- that is deliberate, so a renamed beer never inherits a stale image. */
+function slugify(name) {
+  return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+function beerImgPath(beer) { return 'images/beers/' + slugify(beer.Name) + '.jpg'; }
+
+const EXPAND_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"'
+  + ' stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  + '<path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg>';
+
+/* Populated during render so the lightbox can look a beer up by slug. */
+const beersBySlug = {};
+
 function renderMenu(beers, groups, showPrices) {
   const container = document.getElementById('beer-menu');
 
@@ -245,7 +304,10 @@ function renderMenu(beers, groups, showPrices) {
     list.forEach(beer => {
       const soldOut = (beer.Status || '').toLowerCase().includes('sold out');
       const cls = soldOut ? 'beer reveal sold-out' : 'beer reveal';
-      html += '  <div class="' + cls + '">'
+      const slug = slugify(beer.Name);
+      beersBySlug[slug] = beer;
+      html += '  <div class="' + cls + '" data-slug="' + esc(slug) + '">'
+        + '<div class="beer-main">'
         + '<div class="beer-head"><div>'
         + '<div class="beer-name">' + esc(beer.Name) + '</div>'
         + '<div class="beer-style">' + esc(beer.Style) + '</div>'
@@ -257,6 +319,22 @@ function renderMenu(beers, groups, showPrices) {
             + (beer['Price - 10oz'] ? '<div class="size-col"><span class="size-label">10oz</span><span class="size-price">' + esc(fmtPrice(beer['Price - 10oz'])) + '</span></div>' : '')
             + (beer['Price - 16oz'] ? '<div class="size-col"><span class="size-label">16oz</span><span class="size-price">' + esc(fmtPrice(beer['Price - 16oz'])) + '</span></div>' : '')
             + '</div>' : '')
+        + '</div>'
+        /* The thumbnail is speculative: most beers have no photo. It stays
+           display:none until onload proves the file exists, and deletes itself
+           on error so a missing photo leaves no broken-image icon and no CTA.
+           Deliberately NOT loading="lazy": a display:none image has no layout
+           box, so it may never intersect the viewport and would never load --
+           the photo would silently never appear. Cost of correctness is that
+           beers with photos fetch them up front. */
+        + '<div class="beer-photo-wrap">'
+        + '<img class="beer-thumb" alt="' + esc(beer.Name) + '"'
+        + ' src="' + esc(beerImgPath(beer)) + '"'
+        + ' onload="this.closest(\'.beer\').classList.add(\'has-photo\')"'
+        + ' onerror="this.closest(\'.beer-photo-wrap\').remove()">'
+        + '<span class="beer-expand">' + EXPAND_SVG + 'Tap to enlarge</span>'
+        + '</div>'
+        /* Description is the card's last child so it can span the full width under the photo (client, 2026-09-28). */
         + '<p class="beer-desc">' + esc(beer.Description) + '</p>'
         + '</div>\n';
     });
@@ -271,6 +349,42 @@ function renderMenu(beers, groups, showPrices) {
   container.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 }
 
+/* ---- Lightbox: only cards that actually have a photo can open it ---- */
+const blb = document.getElementById('beer-lightbox');
+
+function openBeerLightbox(beer) {
+  const soldOut = (beer.Status || '').toLowerCase().includes('sold out');
+  const img = document.getElementById('blb-img');
+  img.src = beerImgPath(beer);
+  img.alt = beer.Name || '';
+  document.getElementById('blb-name').textContent = beer.Name || '';
+  document.getElementById('blb-style').textContent = beer.Style || '';
+  document.getElementById('blb-abv').textContent = beer.ABV || '';
+  document.getElementById('blb-desc').textContent = beer.Description || '';
+  document.getElementById('blb-soldout').hidden = !soldOut;
+  blb.hidden = false;
+  document.body.style.overflow = 'hidden';   /* stop the page scrolling behind it */
+  document.getElementById('blb-close').focus();
+}
+
+function closeBeerLightbox() {
+  blb.hidden = true;
+  document.body.style.overflow = '';
+}
+
+document.getElementById('beer-menu').addEventListener('click', e => {
+  const card = e.target.closest('.beer.has-photo');
+  if (!card) return;                     /* no photo -> no CTA -> nothing opens */
+  const beer = beersBySlug[card.dataset.slug];
+  if (beer) openBeerLightbox(beer);
+});
+blb.addEventListener('click', e => {
+  if (e.target === blb || e.target.closest('.blb-close')) closeBeerLightbox();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !blb.hidden) closeBeerLightbox();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   Promise.all([
     fetch(BEERS_URL).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); }),
@@ -284,10 +398,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const catFilter = params.get('cat');
     const showPrices = params.get('prices') === 'true';
     if (catFilter) {
-      const filterVal = catFilter.trim().toLowerCase();
-      groups = groups.filter(g => g.categories.includes(filterVal));
-      const heading = groups.length ? groups[0].heading : catFilter;
-      document.querySelector('.img-break-text h2').textContent = heading;
+      // ?cat= takes one or more comma-separated categories, e.g. ?cat=lager,ale,stout
+      const wanted = catFilter.split(',').map(c => c.trim().toLowerCase()).filter(Boolean);
+      const matched = groups.filter(g => g.categories.some(c => wanted.includes(c)));
+      // a renamed sheet category must not leave the page blank; show the full menu instead
+      if (matched.length) groups = matched;
+      // The hero heading is an <h1> since the header fix; a null here used to kill the whole render (blank page).
+      const heroHeading = document.querySelector('.img-break-text h1, .img-break-text h2');
+      if (heroHeading && groups.length === 1) heroHeading.textContent = groups[0].heading;
       const wrap = document.querySelector('#beer-menu').parentElement;
       const link = document.createElement('a');
       link.href = showPrices ? 'menu.html?prices=true' : 'menu.html';

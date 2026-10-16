@@ -51,6 +51,8 @@ h3 { font-size: 1.3rem; color: var(--green-primary); }
 
 a { color: var(--amber-bright); text-decoration: none; }
 a:hover { color: var(--green-deep); }
+/* Phone numbers never break at the hyphen, e.g. "(678) 765-" / "8133" (client, 2026-10-15). */
+a[href^="tel:"] { white-space: nowrap; }
 
 img { max-width: 100%; height: auto; display: block; }
 
@@ -80,6 +82,12 @@ img { max-width: 100%; height: auto; display: block; }
   display: block; font-size: .65rem; letter-spacing: .35em;
   color: var(--amber-bright); margin-top: 2px;
 }
+/* Header logo (2026-09-28, client): the logo replaces the text wordmark in the header, and because the header
+   stays on top of the open menu, it is also the only logo in the menu. Height keeps the header ~84px tall so
+   --nav-top below still matches. */
+.brand.brand-has-logo { display: block; line-height: 0; }
+.brand-logo { display: block; height: 58px; width: auto; }   /* logo-header.png is logo3.png cropped tight */
+@media (max-width: 600px) { .brand-logo { height: 48px; } }
 
 /* ============ HAMBURGER / OVERLAY NAV ============ */
 #nav-toggle { display: none; }
@@ -98,18 +106,55 @@ img { max-width: 100%; height: auto; display: block; }
   position: fixed; inset: 0;
   background: rgba(250,248,243,0.98);
   backdrop-filter: blur(12px);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 2rem;
+  display: flex; flex-direction: column; align-items: center;
+  /* SAFE center (2026-08-03): a plain `justify-content: center` CLIPS THE TOP of
+     overflowing flex content — the logo got cut in half on an iPhone. `safe`
+     falls back to flex-start the moment the content is taller than the screen,
+     so the logo and the first link stay reachable and the overlay scrolls. */
+  justify-content: safe center;
+  /* 2rem -> 1.5rem -> .5rem (2026-09-28): the client asked for the menu items closer together. */
+  gap: .5rem;
+  /* The overlay is inset:0, so it starts UNDER the fixed header. Once the URL
+     bar appears and safe-center falls back to top-alignment, the first child
+     (the logo) slid up behind the header band. Reserve the header's height at
+     the top, plus the notch/home-indicator safe areas. --nav-top is the header:
+     .top-inner padding .9rem*2 = 28.8px + the 1.4rem brand line ~= 84px. */
+  --nav-top: 5.4rem;
+  padding:
+    calc(var(--nav-top) + env(safe-area-inset-top, 0px))
+    1rem
+    calc(1.5rem + env(safe-area-inset-bottom, 0px));
   opacity: 0; pointer-events: none;
   transition: opacity .3s ease;
   z-index: 50;
+  overflow-y: auto;            /* never trap the last item off-screen */
+  -webkit-overflow-scrolling: touch;
 }
-.nav-overlay::before {
-  content: ''; position: absolute; inset: 8% 10%;
-  border: 1px solid var(--line); pointer-events: none;
+/* Brand mark at the top of the open menu. The overlay covers the whole phone
+   screen, which hid the logo in the header behind it — the customer noticed. */
+.nav-overlay .nav-logo {
+  display: block;
+  width: auto;
+  height: clamp(92px, 16vh, 150px);
+  margin-bottom: .35rem;
+  flex: 0 0 auto;
 }
+/* The decorative inset hairline that used to sit here was removed 2026-08-03:
+   on a phone it read as a stray box around the menu rather than as a frame. */
 #nav-toggle:checked ~ .nav-overlay {
   opacity: 1; pointer-events: auto;
+}
+/* CLOSE BUTTON FIX (2026-08-03): .hamburger had z-index:60, but it lives inside
+   .top which is z-index:20 and therefore creates its own stacking context — so
+   that 60 only ranked it against its siblings INSIDE the header, and the whole
+   header sat under the overlay's z-index:50. The X was drawn behind the overlay
+   and could not be tapped, leaving no way out of the menu. Lift the header
+   itself above the overlay while the menu is open. */
+#nav-toggle:checked ~ .top {
+  z-index: 60;
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
 }
 #nav-toggle:checked ~ .top .hamburger span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
@@ -120,10 +165,12 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .nav-overlay a.nav-link {
   font-family: 'Oswald', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  /* Lower floor than the old 1.8rem so seven items + logo fit a short phone. */
+  font-size: clamp(2.15rem, 6vw, 3rem);
   letter-spacing: .22em; text-transform: uppercase;
   color: var(--green-deep);
-  padding: .4rem 1rem;
+  padding: .3rem 1rem;
+  flex: 0 0 auto;
   position: relative;
   transition: color .2s, letter-spacing .2s;
 }
@@ -137,16 +184,24 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .nav-overlay .nav-sub {
   font-family: 'Oswald', sans-serif;
-  font-size: .75rem; letter-spacing: .4em; text-transform: uppercase;
+  font-size: .75rem; letter-spacing: .32em; text-transform: uppercase;
   color: var(--green-primary);
-  margin-top: 2rem;
+  margin-top: .9rem;   /* was 2rem, on top of the flex gap */
+  flex: 0 0 auto;
 }
 .nav-overlay .nav-sub a { color: var(--green-primary); }
 .nav-overlay .nav-sub a:hover { color: var(--amber-bright); }
 .nav-overlay .nav-address {
-  font-size: .85rem; letter-spacing: .05em; color: var(--text-muted);
+  font-size: .8rem; letter-spacing: .05em; color: var(--text-muted);
   text-align: center; max-width: 36ch;
-  margin-top: .5rem;
+  margin-top: .15rem;
+  flex: 0 0 auto;
+}
+/* Short phones (iPhone SE / mini in landscape-ish heights): shed a little more. */
+@media (max-height: 700px) {
+  .nav-overlay { gap: .35rem; --nav-top: 4.9rem; }
+  .nav-overlay .nav-logo { height: clamp(60px, 12vh, 92px); }
+  .nav-overlay a.nav-link { font-size: clamp(1.55rem, 4.2vw, 2.1rem); letter-spacing: .18em; }
 }
 body:has(#nav-toggle:checked) { overflow: hidden; }
 
@@ -376,6 +431,15 @@ section { padding: 5rem 1.5rem; }
 }
 .cat h3 { font-size: 1.5rem; color: var(--green-deep); margin-bottom: .8rem; }
 .cat p { color: var(--text-muted); font-size: .95rem; }
+/* The cards are links to the filtered menu (menu.html?cat=...). Without these, the lift-on-hover made them look
+   tappable on phones while doing nothing (2026-10-08). */
+a.cat { display: block; color: inherit; text-decoration: none; }
+a.cat:active { transform: translateY(-2px); }
+.cat-cta {
+  display: inline-block; margin-top: 1.1rem;
+  font-family: 'Oswald', sans-serif; font-size: .9rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--green-deep); border-bottom: 1px solid currentColor; padding-bottom: 2px;
+}
 
 /* ============ FULL-WIDTH IMAGE BREAK ============ */
 .img-break {
@@ -395,6 +459,58 @@ section { padding: 5rem 1.5rem; }
   from { transform: scale(1.04) translate3d(0, 0, 0); }
   to   { transform: scale(1.12) translate3d(-1.5%, -1.2%, 0); }
 }
+/* ── ABOUT PAGE HERO ONLY (2026-08-03) ───────────────────────────────────────
+   images/about.jpg is 799x533 (aspect 1.50) but the hero band is full-width and
+   40vh, which is roughly aspect 4.2 on a laptop. object-fit:cover therefore
+   keeps only the middle ~36% of the photo's HEIGHT, and both owners' faces sit
+   in the upper third — so desktop cropped their heads off entirely and mobile
+   sliced the tops. Scoped to .img-break.about-hero so the other five pages that
+   share .img-break are untouched.
+   ─────────────────────────────────────────────────────────────────────────── */
+.img-break.about-hero {
+  height: 52vh;            /* taller band keeps ~45% of the frame instead of 36% */
+  min-height: 340px;
+}
+.img-break.about-hero img {
+  /* Pull the visible window up toward the faces rather than the centre. */
+  object-position: center 28%;
+  /* The Ken Burns pan moves the crop, which is what made the framing feel
+     unstable as well as wrong. Hold this one still. */
+  animation: none;
+  transform: none;
+}
+/* The eyebrow was sliding under the fixed header on phones, same overlap class
+   as the nav logo. Push the hero text down clear of the header band. */
+.img-break.about-hero .img-break-overlay {
+  padding-top: calc(4.6rem + env(safe-area-inset-top, 0px));
+}
+/* Client (2026-10-08): the headline sat on Mike's and Paul's faces. Anchor it to the bottom of the
+   banner, over their shirts, with a darker fade there so it stays readable. */
+.img-break.about-hero .img-break-overlay {
+  align-items: flex-end;
+  padding-bottom: 2rem;
+  background: linear-gradient(to bottom, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,.72) 100%);
+}
+.img-break.about-hero .img-break-text .eyebrow { margin-bottom: .5rem; }
+.img-break.about-hero h1 { line-height: 1.05; }
+/* On computers the banner is a short wide strip, so even at the bottom the headline reached their chins.
+   There, put it on the left over the taps instead, with the fade running left-to-right (client 2026-10-08). */
+@media (min-width: 900px) {
+  .img-break.about-hero .img-break-overlay {
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 6vw;
+    padding-bottom: 0;
+    background: linear-gradient(to right, rgba(0,0,0,.72) 0%, rgba(0,0,0,.45) 26%, rgba(0,0,0,0) 40%);
+  }
+  .img-break.about-hero .img-break-text { text-align: left; }
+  .img-break.about-hero h1 { font-size: clamp(2rem, 3.4vw, 3.2rem) !important; }
+}
+@media (max-width: 640px) {
+  .img-break.about-hero { height: 46vh; min-height: 300px; }
+  .img-break.about-hero img { object-position: center 22%; }
+}
+
 .img-break-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(to bottom, rgba(0,0,0,.45) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,.5) 100%);
@@ -483,6 +599,114 @@ section { padding: 5rem 1.5rem; }
   margin-top: .6rem; color: var(--text-muted); font-size: .92rem;
   line-height: 1.5;
 }
+
+/* ---- Beer photos on the main menu (customer punch list #4/#5) ----
+   A card only becomes a photo card once its image actually loads. Photos are
+   optional per beer (images/beers/<slug>.jpg), so the two-column layout, the
+   zoom cursor, and the "expand" CTA are all gated on .has-photo -- otherwise
+   every beer would advertise a photo and most would open an empty lightbox. */
+.beer-photo-wrap { display: none; }
+.beer.has-photo {
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  column-gap: 1.1rem;
+  row-gap: .7rem;
+  align-items: start;
+  cursor: zoom-in;
+}
+/* Client (2026-09-28): the description starts BELOW the photo and runs the full card width, instead of
+   wrapping in the narrow column beside the photo. */
+.beer.has-photo .beer-desc { grid-column: 1 / -1; margin-top: 0; }
+.beer.has-photo .beer-photo-wrap {
+  display: block;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  line-height: 0;
+}
+.beer-thumb {
+  width: 96px; height: 96px;
+  object-fit: cover;
+  display: block;
+  transition: transform .25s ease;
+}
+.beer.has-photo:hover .beer-thumb { transform: scale(1.06); }
+
+/* The CTA is a permanent badge, not a hover-only hint -- most of this menu is
+   read on a phone, where there is no hover state to discover it with. */
+.beer-expand {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex; align-items: center; justify-content: center; gap: .25rem;
+  padding: .22rem .3rem;
+  background: linear-gradient(to top, rgba(12,20,15,.85), rgba(12,20,15,0));
+  color: #fff;
+  font-family: 'Oswald', sans-serif;
+  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+  line-height: 1;
+  pointer-events: none;
+}
+.beer-expand svg { width: 9px; height: 9px; flex: none; }
+
+@media (max-width: 420px) {
+  .beer.has-photo { grid-template-columns: 1fr 76px; column-gap: .9rem; row-gap: .6rem; }
+  .beer-thumb { width: 76px; height: 76px; }
+}
+
+/* ---- Beer lightbox (menu.html) ---- */
+.beer-lightbox {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(12, 20, 15, .86);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.25rem;
+}
+.beer-lightbox[hidden] { display: none; }
+.blb-card {
+  background: var(--paper);
+  border-radius: 4px;
+  max-width: 520px; width: 100%;
+  max-height: 88vh; overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,.45);
+}
+.blb-card img { width: 100%; display: block; }
+.blb-body { padding: 1.4rem 1.6rem 1.6rem; }
+.blb-close {
+  position: absolute; top: .5rem; right: .5rem;
+  width: 38px; height: 38px;
+  border: 0; border-radius: 50%;
+  background: rgba(12,20,15,.55); color: #fff;
+  font-size: 1.5rem; line-height: 1; cursor: pointer;
+}
+.blb-close:hover { background: rgba(12,20,15,.8); }
+.blb-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5rem; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink);
+}
+.blb-style {
+  font-size: .82rem; color: var(--green-primary);
+  letter-spacing: .1em; text-transform: uppercase; margin-top: .15rem;
+}
+.blb-abv {
+  font-family: 'Oswald', sans-serif;
+  color: var(--amber-bright); font-size: 1rem;
+  letter-spacing: .1em; margin-top: .4rem;
+}
+.blb-desc { margin-top: .8rem; color: var(--text-muted); line-height: 1.6; }
+.blb-soldout {
+  display: inline-block; margin-top: .9rem;
+  padding: .25rem .6rem;
+  background: var(--green-deep); color: #fff;
+  font-family: 'Oswald', sans-serif;
+  font-size: .75rem; letter-spacing: .14em;
+}
+/* Required because the rule above sets an explicit display. The hidden attribute
+   is only display:none in the UA stylesheet, so ANY author display declaration
+   beats it and the badge shows permanently -- which it did, on every pictured
+   beer, regardless of the sheet. Same guard as .beer-lightbox[hidden] above. */
+.blb-soldout[hidden] { display: none; }
+
 .cat-header {
   font-family: 'Oswald', sans-serif;
   font-size: 1.6rem; letter-spacing: .12em;
@@ -550,6 +774,58 @@ section { padding: 5rem 1.5rem; }
   border-color: var(--amber-bright);
 }
 @media (max-width: 560px) { .event { grid-template-columns: 1fr; } }
+/* ============ MERCH (2026-09-28) ============
+   Listing only (no online sales), styled after the client's reference site: big square photos, name + price
+   underneath. Items without a photo get a faint logo tile so the grid stays even. */
+.merch-note { color: var(--text-muted); font-style: italic; margin: 0 auto 2.2rem; }
+.merch-sample { color: #b44; font-family: 'Oswald', sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  font-size: .8rem; margin-bottom: 1.2rem; }
+.merch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.4rem 1.6rem; }
+@media (max-width: 760px) { .merch-grid { grid-template-columns: repeat(2, 1fr); gap: 1.6rem 1rem; } }
+.merch-item { text-align: center; cursor: zoom-in; outline-offset: 4px; }
+.merch-photo { position: relative; aspect-ratio: 1 / 1; overflow: hidden; background: var(--paper);
+  border-radius: 2px; box-shadow: 0 1px 6px var(--card-shadow); }
+.merch-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+.merch-item:hover .merch-photo img, .merch-item:focus .merch-photo img { transform: scale(1.06); }
+.merch-photo.placeholder img { object-fit: contain; padding: 22%; opacity: .28; }
+.merch-badge { position: absolute; top: .7rem; right: .7rem; background: var(--amber-bright); color: #fff;
+  font-family: 'Oswald', sans-serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+  padding: .25rem .55rem; border-radius: 2px; }
+.merch-badge.soldout { background: #6b6b6b; }
+.merch-item.sold-out .merch-photo img { opacity: .5; }
+.merch-name { font-family: 'Oswald', sans-serif; font-size: 1.05rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink); margin-top: 1rem; line-height: 1.25; }
+.merch-price { font-family: 'Oswald', sans-serif; color: var(--amber-bright); letter-spacing: .08em; margin-top: .3rem; }
+.merch-price s, #mlb-price s { color: var(--text-muted); margin-left: .45rem; font-size: .9em; }
+.merch-sizes { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); margin-top: .25rem; }
+
+/* Event photos (2026-09-28): same pattern as beer photos -- hidden until the image actually loads. */
+.event-photo { display: none; position: relative; border-radius: 4px; overflow: hidden; line-height: 0; align-self: start; }
+.event.has-photo { grid-template-columns: 110px 1fr 96px; cursor: zoom-in; }
+.event.has-photo .event-photo { display: block; }
+.event-photo img { width: 96px; height: 96px; object-fit: cover; display: block; transition: transform .25s ease; }
+/* Client (2026-10-08): the description continues UNDER the photo instead of squeezing into the column beside
+   it (same fix as beer cards). It is the card's last child; the date spans both rows on wide screens. */
+@media (min-width: 561px) {
+  .event { row-gap: 0; }
+  .event-date { grid-row: 1 / span 2; }
+  .event > .event-desc { grid-column: 2 / -1; }
+}
+@media (max-width: 560px) {
+  .event { row-gap: .6rem; }
+  .event > .event-desc { grid-column: 1 / -1; margin-top: 0; }
+}
+/* Weekly events have no date block: give the title the whole width instead of the 110px date column. */
+.event.no-date { grid-template-columns: 1fr; }
+.event.no-date.has-photo { grid-template-columns: 1fr 96px; }
+.event.no-date > .event-desc { grid-column: 1 / -1; }
+@media (max-width: 560px) { .event.no-date.has-photo { grid-template-columns: 1fr 76px; } }
+.event.has-photo:hover .event-photo img { transform: scale(1.06); }
+@media (max-width: 560px) {
+  .event.has-photo { grid-template-columns: 1fr 76px; }
+  .event.has-photo .event-date { grid-column: 1 / -1; }
+  .event-photo img { width: 76px; height: 76px; }
+}
 .event-date {
   text-align: center;
   font-family: 'Oswald', sans-serif;
@@ -557,6 +833,8 @@ section { padding: 5rem 1.5rem; }
 }
 .event-date .d { font-size: 2rem; line-height: 1; display: block; }
 .event-date .m { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; }
+/* Free-text "dates" that are not m/d or a weekday: smaller and allowed to wrap, never wider than the column. */
+.event-date.txt .d { font-size: 1.1rem; line-height: 1.2; overflow-wrap: anywhere; }
 .event-title {
   font-family: 'Oswald', sans-serif;
   font-size: 1.25rem; letter-spacing: .08em;

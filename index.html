@@ -15,14 +15,29 @@
 <meta property="og:site_name" content="Meander Brewing Co.">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="meander.css?v=20261015b">
+<script src="flags.js"></script>
+<script src="sheet.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Brewery",
+  "@id": "https://meander.benannaink.com/#brewery",
   "name": "Meander Brewing Co.",
-  "description": "Craft brewery in Buford, Georgia. Packed with flavor, brewed to perfection. Kid and dog friendly taproom with 20+ beers on tap.",
-  "url": "https://meander.benannaink.com",
-  "telephone": "+1-678-765-8133",
+  "description": "Craft brewery and taproom in historic downtown Buford, Georgia. 20+ beers on tap, kid and dog friendly, locally sourced ingredients. Est. 2024.",
+  "url": "https://meander.benannaink.com/",
+  "telephone": "+16787658133",
+  "email": "meanderbrewingco@gmail.com",
+  "foundingDate": "2024",
+  "priceRange": "$$",
+  "servesCuisine": "Craft Beer",
+  "menu": "https://meander.benannaink.com/menu.html",
+  "image": "https://meander.benannaink.com/images/hero.jpg",
+  "logo": "https://meander.benannaink.com/images/logo3.png",
+  "hasMap": "https://www.google.com/maps/search/?api=1&query=Meander+Brewing+Co+110+E+Moreno+St+Buford+GA",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "110 E. Moreno St.",
@@ -36,35 +51,19 @@
     "latitude": 34.1203,
     "longitude": -84.0038
   },
-  "openingHoursSpecification": [
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Wednesday", "opens": "15:00", "closes": "22:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "15:00", "closes": "22:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "14:00", "closes": "23:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "12:00", "closes": "23:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "13:00", "closes": "20:00" }
-  ],
-  "image": "https://meander.benannaink.com/images/hero.jpg",
-  "priceRange": "$$",
-  "servesCuisine": "Craft Beer",
   "sameAs": [
     "https://www.instagram.com/meanderbrewingco/",
-    "https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/",
-    "https://untappd.com/v/meander-brewing-company/12385595"
+    "https://www.facebook.com/profile.php?id=61561907513937"
   ]
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="meander.css">
-<script src="flags.js"></script>
 </head>
 <body>
 
 <input type="checkbox" id="nav-toggle" aria-hidden="true">
 <header class="top">
   <div class="top-inner">
-    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <a href="index.html" class="brand brand-has-logo" aria-label="Meander Brewing Co. home"><img src="images/logo-header.png" alt="Meander Brewing Co." class="brand-logo" width="192" height="128"></a>
     <label for="nav-toggle" class="hamburger" aria-label="Open menu">
       <span></span><span></span><span></span>
     </label>
@@ -73,17 +72,11 @@
 <div class="nav-overlay" role="dialog" aria-label="Site navigation">
   <a href="index.html" class="nav-link active">Home</a>
   <a href="menu.html" class="nav-link">On Tap</a>
-  <a href="about.html" class="nav-link">About</a>
+  <a href="about.html" class="nav-link">About Us</a>
   <a href="events.html" class="nav-link">Events</a>
   <a href="photos.html" class="nav-link">Photos</a>
   <a href="visit.html" class="nav-link">Visit</a>
   <a href="faq.html" class="nav-link">FAQ</a>
-  <div class="nav-sub">
-    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
-    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
-    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
-  </div>
-  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
 </div>
 
 <!-- ====== HERO with video background ====== -->
@@ -96,7 +89,6 @@
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <img loading="lazy" src="images/logo3.png" alt="Meander Brewing Company" class="logo-main">
     <div class="eyebrow">Buford, Georgia · Est. 2024</div>
     <h1>Packed with Flavor.<br>Brewed to Perfection.</h1>
     <p class="tagline">Two decades in the making. Craft beer built on local ingredients, big flavor, and the kind of taproom you don't want to leave.</p>
@@ -124,22 +116,23 @@
       <div class="divider"></div>
     </div>
     <div class="cat-grid">
-      <div class="cat reveal stagger-1">
+      <a href="menu.html?cat=ipa" class="cat reveal stagger-1">
         <h3>IPAs</h3>
         <p>West Coast to hazy, bright and bitter to dripping with juice. Our flagships and our experiments all live here.</p>
-        <a href="menu.html?cat=ipa" class="btn" style="margin-top:1.2rem">Browse IPAs</a>
-      </div>
-      <div class="cat reveal stagger-2">
+        <span class="cat-cta">See IPAs &rarr;</span>
+      </a>
+      <a href="menu.html?cat=lager,ale,stout" class="cat reveal stagger-2">
         <h3>Lagers, Ales &amp; Stouts</h3>
         <p>Clean kolsches, easy-drinking cream ales, warming browns, and stouts that reward a slow sip. Beers for every type of drinker.</p>
-        <a href="menu.html?cat=lager" class="btn" style="margin-top:1.2rem">Browse the List</a>
-      </div>
-      <div class="cat reveal stagger-3">
+        <span class="cat-cta">See Lagers, Ales &amp; Stouts &rarr;</span>
+      </a>
+      <a href="menu.html?cat=sour,seltzer" class="cat reveal stagger-3">
         <h3>Sours &amp; Seltzers</h3>
         <p>Several different flavors for the sour and seltzer fans. Bright, fruit-forward, and built for warm Georgia afternoons.</p>
-        <a href="menu.html?cat=sour" class="btn" style="margin-top:1.2rem">Browse Sours</a>
-      </div>
+        <span class="cat-cta">See Sours &amp; Seltzers &rarr;</span>
+      </a>
     </div>
+    <p class="center reveal" style="margin-top:2.5rem"><a href="menu.html" class="btn filled">See What's On Tap</a></p>
   </div>
 </section>
 
@@ -173,30 +166,6 @@
   </div>
 </section>
 
-<!-- ====== STATS ====== -->
-<section>
-  <div class="wrap">
-    <div class="stat-row reveal">
-      <div class="stat-item">
-        <div class="stat-number" data-count="20">20+</div>
-        <div class="stat-label">Beers on Tap</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">20</div>
-        <div class="stat-label">Years Brewing</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">2</div>
-        <div class="stat-label">Founders</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">1</div>
-        <div class="stat-label">Taproom</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ====== FULL-WIDTH IMAGE: CHEERS ====== -->
 <div class="img-break reveal">
   <img loading="lazy" src="images/taproom1.jpg" alt="Friends clinking beer glasses">
@@ -219,7 +188,7 @@
         <div class="eyebrow" style="font-family:'Oswald',sans-serif; letter-spacing:.5em; text-transform:uppercase; color:var(--amber-bright); font-size:.75rem; margin-bottom:.9rem;">Family Welcome</div>
         <h2>Kid &amp; Dog Friendly</h2>
         <div class="divider" style="margin: 1rem 0 1.5rem;"></div>
-        <p>Games to keep the family entertained, an outdoor beer garden for our furry friends, the big games on the TVs, and house-made root beer on tap for the little ones.</p>
+        <p>Games to keep the family entertained, an outdoor beer garden, the big games on the TVs, and house-made root beer on tap for the little ones. Well-behaved furry friends are welcome inside and out; we just ask that they stay on a leash.</p>
         <p>We're striving to be a staple of the Buford community. Our taps pour a little something extra for local causes.</p>
       </div>
     </div>
@@ -237,11 +206,11 @@
     <div class="props">
       <div class="prop reveal stagger-1">
         <h4>Engaging Our Community</h4>
-        <p>Trivia, live music, fundraisers, and open patio nights. We want you here when you're not drinking too.</p>
+        <p>Trivia, fundraisers, and open patio nights. We want you here when you're not drinking too.</p>
       </div>
       <div class="prop reveal stagger-2">
         <h4>Kid &amp; Dog Friendly</h4>
-        <p>Games to keep the family entertained, an outdoor beer garden for our furry friends, and the big games on the TVs.</p>
+        <p>Games to keep the family entertained, an outdoor beer garden, and the big games on the TVs. Furry friends are welcome inside and out, on a leash.</p>
       </div>
       <div class="prop reveal stagger-3">
         <h4>Giving Back</h4>
@@ -257,10 +226,10 @@
 
 <!-- ====== TAPROOM IMAGE ====== -->
 <div class="img-break reveal">
-  <img loading="lazy" src="images/hero.jpg" alt="Meander taproom packed with live music">
+  <img loading="lazy" src="images/hero.jpg" alt="Meander taproom packed with guests">
   <div class="img-break-overlay">
     <div class="img-break-text reveal">
-      <span class="eyebrow">Live Music · Trivia · Events</span>
+      <span class="eyebrow">Trivia · Games · Events</span>
       <h2>Come for a Pint, Stay for the Night</h2>
     </div>
   </div>
@@ -277,14 +246,16 @@
     <div class="visit-grid">
       <div class="hours-block reveal-left">
         <h3 style="margin-top:0">Taproom Hours</h3>
-        <table class="hours-table">
+        <table class="hours-table" id="hours-table">
+          <!-- BAKED:hours  do not edit by hand: tools/bake-sheets.py -->
           <tr><td>Monday</td><td class="closed">Closed</td></tr>
-          <tr><td>Tuesday</td><td class="closed">Closed</td></tr>
+          <tr><td>Tuesday</td><td>5:00 PM – 10:00 PM</td></tr>
           <tr><td>Wednesday</td><td>3:00 PM – 10:00 PM</td></tr>
           <tr><td>Thursday</td><td>3:00 PM – 10:00 PM</td></tr>
-          <tr><td>Friday</td><td>2:00 PM – 11:00 PM</td></tr>
+          <tr><td>Friday</td><td>3:00 PM – 11:00 PM</td></tr>
           <tr><td>Saturday</td><td>12:00 PM – 11:00 PM</td></tr>
-          <tr><td>Sunday</td><td>1:00 PM – 8:00 PM</td></tr>
+          <tr><td>Sunday</td><td>2:00 PM – 9:00 PM</td></tr>
+          <!-- /BAKED:hours -->
         </table>
       </div>
       <div class="info-block reveal-right">
@@ -320,7 +291,7 @@
       <h5>Explore</h5>
       <ul>
         <li><a href="menu.html">On Tap</a></li>
-        <li><a href="about.html">About</a></li>
+        <li><a href="about.html">About Us</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="photos.html">Photos</a></li>
         <li><a href="visit.html">Visit</a></li>
@@ -343,6 +314,27 @@
 </footer>
 
 <script>
+/* Hours: baked from the website sheet's hours tab (tools/bake-sheets.py), same as
+   visit.html, so the first paint is correct. This fetch picks up sheet edits made
+   since the last bake; on failure the baked rows stand. */
+(function () {
+  var HOURS_GID = 43882215;
+  if (!window.MeanderSheet) return;
+  MeanderSheet.fetchTab(HOURS_GID, 'Day').then(function (rows) {
+    var table = document.getElementById('hours-table');
+    if (!table) return;
+    var html = '';
+    rows.forEach(function (r) {
+      var day = (r.Day || r.day || '').trim();
+      var hrs = (r.Hours || r.hours || '').trim();
+      if (!day) return;
+      var closed = /closed/i.test(hrs);
+      html += '<tr><td>' + MeanderSheet.esc(day) + '</td><td' + (closed ? ' class="closed"' : '') + '>' + MeanderSheet.esc(hrs) + '</td></tr>';
+    });
+    if (html) table.innerHTML = html;
+  }).catch(function () { /* keep the baked table */ });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   // Scroll reveal
   const obs = new IntersectionObserver((entries) => {

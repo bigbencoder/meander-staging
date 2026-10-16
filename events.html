@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
 <title>Events · Meander Brewing Co.</title>
-<meta name="description" content="Trivia, live music, fundraisers, and taproom events at Meander Brewing Co. in Buford, Georgia.">
+<meta name="description" content="Trivia, games, fundraisers, and taproom events at Meander Brewing Co. in Buford, Georgia.">
 <link rel="canonical" href="https://meander.benannaink.com/events.html">
 <meta property="og:title" content="Events — Meander Brewing Co.">
-<meta property="og:description" content="Trivia, live music, fundraisers, and taproom events at Meander Brewing Co. in Buford, Georgia.">
+<meta property="og:description" content="Trivia, games, fundraisers, and taproom events at Meander Brewing Co. in Buford, Georgia.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://meander.benannaink.com/events.html">
 <meta property="og:image" content="https://meander.benannaink.com/images/hero.jpg">
@@ -17,15 +17,51 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="meander.css">
+<link rel="stylesheet" href="meander.css?v=20261015b">
 <script src="flags.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Brewery",
+  "@id": "https://meander.benannaink.com/#brewery",
+  "name": "Meander Brewing Co.",
+  "description": "Craft brewery and taproom in historic downtown Buford, Georgia. 20+ beers on tap, kid and dog friendly, locally sourced ingredients. Est. 2024.",
+  "url": "https://meander.benannaink.com/",
+  "telephone": "+16787658133",
+  "email": "meanderbrewingco@gmail.com",
+  "foundingDate": "2024",
+  "priceRange": "$$",
+  "servesCuisine": "Craft Beer",
+  "menu": "https://meander.benannaink.com/menu.html",
+  "image": "https://meander.benannaink.com/images/hero.jpg",
+  "logo": "https://meander.benannaink.com/images/logo3.png",
+  "hasMap": "https://www.google.com/maps/search/?api=1&query=Meander+Brewing+Co+110+E+Moreno+St+Buford+GA",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "110 E. Moreno St.",
+    "addressLocality": "Buford",
+    "addressRegion": "GA",
+    "postalCode": "30518",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 34.1203,
+    "longitude": -84.0038
+  },
+  "sameAs": [
+    "https://www.instagram.com/meanderbrewingco/",
+    "https://www.facebook.com/profile.php?id=61561907513937"
+  ]
+}
+</script>
 </head>
 <body>
 
 <input type="checkbox" id="nav-toggle" aria-hidden="true">
 <header class="top">
   <div class="top-inner">
-    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <a href="index.html" class="brand brand-has-logo" aria-label="Meander Brewing Co. home"><img src="images/logo-header.png" alt="Meander Brewing Co." class="brand-logo" width="192" height="128"></a>
     <label for="nav-toggle" class="hamburger" aria-label="Open menu">
       <span></span><span></span><span></span>
     </label>
@@ -34,22 +70,16 @@
 <div class="nav-overlay" role="dialog" aria-label="Site navigation">
   <a href="index.html" class="nav-link">Home</a>
   <a href="menu.html" class="nav-link">On Tap</a>
-  <a href="about.html" class="nav-link">About</a>
+  <a href="about.html" class="nav-link">About Us</a>
   <a href="events.html" class="nav-link active">Events</a>
   <a href="photos.html" class="nav-link">Photos</a>
   <a href="visit.html" class="nav-link">Visit</a>
   <a href="faq.html" class="nav-link">FAQ</a>
-  <div class="nav-sub">
-    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
-    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
-    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
-  </div>
-  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
 </div>
 
 <!-- ====== HERO BANNER ====== -->
 <div class="img-break" style="min-height: 40vh; height: 40vh;">
-  <img loading="lazy" src="images/hero.jpg" alt="Meander taproom packed with live music">
+  <img loading="lazy" src="images/hero.jpg" alt="Meander taproom packed with guests">
   <div class="img-break-overlay">
     <div class="img-break-text">
       <span class="eyebrow">What's Happening</span>
@@ -61,7 +91,7 @@
 <section>
   <div class="wrap">
     <p class="tagline center reveal" style="margin: 0 auto 3rem; max-width: 52ch;">
-      Trivia, live music, book club, release parties, and fundraisers. The taproom is built to host — check in often, the calendar stays busy.
+      Trivia, book club, release parties, and fundraisers. The taproom is built to host — check in often, the calendar stays busy.
     </p>
 
     <!-- Events are rendered from the Google Sheet "Events" tab (published CSV). -->
@@ -70,7 +100,7 @@
     </div>
 
     <p class="center reveal" style="margin-top: 4rem; color: var(--text-muted); font-style: italic; max-width: 48ch; margin-left: auto; margin-right: auto;">
-      Want your event here? Private rentals for the taproom, beer garden, or full venue are available Monday and Tuesday.
+      Want your event here? The taproom, beer garden, or full venue can be booked for private events. Reach out and we'll find a date that works.
       <br><br>
       Email <a href="mailto:meanderbrewingco@gmail.com">meanderbrewingco@gmail.com</a> or call <a href="tel:+16787658133">(678) 765-8133</a>.
     </p>
@@ -90,7 +120,7 @@
       <h5>Explore</h5>
       <ul>
         <li><a href="menu.html">On Tap</a></li>
-        <li><a href="about.html">About</a></li>
+        <li><a href="about.html">About Us</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="photos.html">Photos</a></li>
         <li><a href="visit.html">Visit</a></li>
@@ -112,9 +142,21 @@
   </div>
 </footer>
 
+<div class="beer-lightbox" id="event-lightbox" hidden role="dialog" aria-modal="true" aria-label="Event photo">
+  <div class="blb-card">
+    <button class="blb-close" id="elb-close" aria-label="Close">&times;</button>
+    <img id="elb-img" alt="">
+    <div class="blb-body">
+      <div class="blb-name" id="elb-title"></div>
+      <div class="blb-style" id="elb-when"></div>
+      <div class="blb-desc" id="elb-desc"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── Events feed: reads the "Events" tab of the menu spreadsheet (published CSV) ──
-const EVENTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv&gid=1395604298';
+const EVENTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT-__sJlKHc3Z7Ece8LmX5lRToq8x3G51Gass8hJN5wM9uunnJqlVtzvT201YGQ06Wn-WgTlrRWYqDi/pub?single=true&output=csv&gid=1395604298';
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 function parseCSVLine(line) {
@@ -145,6 +187,16 @@ function parseCSV(text) {
 }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
+/* Event photos (2026-09-28): staff upload one photo per event TITLE through the internal uploader, saved as
+   images/events/<slug>.jpg. Keying by title means a repeating event (every Trivia night) reuses one photo.
+   Must match the uploader's slugify exactly. */
+function slugify(name) { return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); }
+function eventImgPath(ev) { return 'images/events/' + slugify(ev['Title']) + '.jpg'; }
+const EXPAND_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"'
+  + ' stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  + '<path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg>';
+const eventsByIndex = [];
+
 // "5/14" / "5/14/2026" → { d:"14", m:"May" }; falls back to raw text if unparseable.
 function parseDate(raw) {
   const t = (raw || '').trim(); if (!t) return null;
@@ -153,17 +205,40 @@ function parseDate(raw) {
   if (mo >= 1 && mo <= 12 && day >= 1 && day <= 31) {
     return { d: String(day).padStart(2, '0'), m: MONTHS[mo - 1] };
   }
-  return { d: esc(t), m: '' };
+  /* Weekly events: the client types a day name ("Wednesday's", "Tuesdays", "every Fri"). Show it like a date
+     (big "WED", small "Weekly") so it fits the 110px date column instead of overflowing it (client, 2026-10-15). */
+  const wd = t.toLowerCase().replace(/[’`]/g, "'").replace(/^every\s+/, '').match(/^(mon|tue|wed|thu|fri|sat|sun)(?:day|sday|nesday|rsday|urday|rs)?(?:'?s)?\.?$/);
+  if (wd) return { d: wd[1].toUpperCase(), m: 'Weekly' };
+  return { d: esc(t), m: '', txt: true };
 }
 function fmtTime(start, end) {
-  start = (start || '').trim(); end = (end || '').trim();
+  /* Sheets shows some times as "6:30:00 PM"; drop the :00 seconds. */
+  const tidy = t => (t || '').trim().replace(/^(\d{1,2}:\d{2}):00(?=\s*[AaPp][Mm]?\b|$)/, '$1');
+  start = tidy(start); end = tidy(end);
   if (start && end) return esc(start) + ' – ' + esc(end);
   return esc(start || end);
 }
 
+/* Past dated events drop off by themselves (client, 2026-10-15). An event stays up through the end of its day.
+   "10/8" has no year: it counts as this year, unless that is more than ~6 months ago, in which case it means next
+   year (a "1/10" listed in December). Weekday entries ("Wednesday's") and free text never expire. */
+function isPast(raw, now) {
+  const p = (raw || '').trim().split('/');
+  const mo = parseInt(p[0], 10), day = parseInt(p[1], 10);
+  if (!(mo >= 1 && mo <= 12 && day >= 1 && day <= 31)) return false;
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let yr = parseInt(p[2], 10);
+  if (yr >= 0 && yr < 100) yr += 2000;
+  if (yr > 1999) return new Date(yr, mo - 1, day) < today;
+  let d = new Date(today.getFullYear(), mo - 1, day);
+  if (d - today > 183 * 864e5) d = new Date(today.getFullYear() - 1, mo - 1, day);  // "12/28" read on Jan 5
+  return d < today && (today - d) <= 183 * 864e5;
+}
+
 function renderEvents(rows) {
-  // keep rows with at least a date or a title
-  const events = rows.filter(r => (r['Date'] || r['Title']));
+  // keep rows with at least a date or a title, and drop dated events that have already happened
+  const now = new Date();
+  const events = rows.filter(r => (r['Date'] || r['Title']) && !isPast(r['Date'], now));
   const root = document.getElementById('events-root');
   if (!events.length) {
     root.innerHTML = '<p class="center" style="color:var(--text-muted);font-style:italic;">No events scheduled right now — check back soon.</p>';
@@ -181,21 +256,58 @@ function renderEvents(rows) {
     html += '<h2 class="cat-header reveal">' + esc(cat) + '</h2><div class="event-list">';
     byCat[cat].forEach((ev, i) => {
       const dt = parseDate(ev['Date']);
-      const dateBlock = dt ? '<div class="event-date"><span class="d">' + dt.d + '</span><span class="m">' + dt.m + '</span></div>' : '';
+      const dateBlock = dt ? '<div class="event-date' + (dt.txt ? ' txt' : '') + '"><span class="d">' + dt.d + '</span><span class="m">' + dt.m + '</span></div>' : '';
       const time = fmtTime(ev['Start time'], ev['End time']);
-      html += '<div class="event reveal stagger-' + ((i % 4) + 1) + '">' +
+      const idx = eventsByIndex.push(ev) - 1;
+      /* The photo stays hidden until it actually loads (most events have none), and removes itself on error,
+         so an event without a photo looks exactly as before. Not lazy: display:none images may never load. */
+      const photo = slugify(ev['Title'])
+        ? '<div class="event-photo">'
+          + '<img alt="' + esc(ev['Title']) + '" src="' + esc(eventImgPath(ev)) + '"'
+          + ' onload="this.closest(\'.event\').classList.add(\'has-photo\')"'
+          + ' onerror="this.closest(\'.event-photo\').remove()">'
+          + '<span class="beer-expand">' + EXPAND_SVG + 'Tap to enlarge</span>'
+          + '</div>'
+        : '';
+      html += '<div class="event' + (dt ? '' : ' no-date') + ' reveal stagger-' + ((i % 4) + 1) + '" data-idx="' + idx + '">' +
         dateBlock +
         '<div>' +
           '<div class="event-title">' + esc(ev['Title']) + '</div>' +
           (time ? '<div class="event-time">' + time + '</div>' : '') +
-          (ev['Description'] ? '<div class="event-desc">' + esc(ev['Description']) + '</div>' : '') +
         '</div>' +
+        photo +
+        /* Description is the card's last child so it can run full width under the photo (client, 2026-10-08). */
+        (ev['Description'] ? '<div class="event-desc">' + esc(ev['Description']) + '</div>' : '') +
       '</div>';
     });
     html += '</div>';
   });
   root.innerHTML = html;
 }
+
+/* ---- Lightbox: only events whose photo actually loaded can open it ---- */
+const elb = document.getElementById('event-lightbox');
+function openEventLightbox(ev) {
+  const img = document.getElementById('elb-img');
+  img.src = eventImgPath(ev); img.alt = ev['Title'] || '';
+  document.getElementById('elb-title').textContent = ev['Title'] || '';
+  const when = [(ev['Date'] || '').trim(), [ev['Start time'], ev['End time']].map(s => (s || '').trim()).filter(Boolean).join(' – ')]
+    .filter(Boolean).join(' · ');
+  document.getElementById('elb-when').textContent = when;
+  document.getElementById('elb-desc').textContent = ev['Description'] || '';
+  elb.hidden = false;
+  document.body.style.overflow = 'hidden';
+  document.getElementById('elb-close').focus();
+}
+function closeEventLightbox() { elb.hidden = true; document.body.style.overflow = ''; }
+document.getElementById('events-root').addEventListener('click', e => {
+  const card = e.target.closest('.event.has-photo');
+  if (!card) return;
+  const ev = eventsByIndex[Number(card.dataset.idx)];
+  if (ev) openEventLightbox(ev);
+});
+elb.addEventListener('click', e => { if (e.target === elb || e.target.closest('.blb-close')) closeEventLightbox(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !elb.hidden) closeEventLightbox(); });
 
 document.addEventListener('DOMContentLoaded', () => {
   const obs = new IntersectionObserver((entries) => {
@@ -216,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // so editing the sheet updates the page. (Static GitHub Pages has no server to
   // mirror the sheet, so the page reads Google directly.) Timeout guards a hang;
   // on failure we show a graceful fallback rather than a blank section.
-  const EVENTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv&gid=1395604298';
+  const EVENTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT-__sJlKHc3Z7Ece8LmX5lRToq8x3G51Gass8hJN5wM9uunnJqlVtzvT201YGQ06Wn-WgTlrRWYqDi/pub?single=true&output=csv&gid=1395604298';
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 15000);
   fetch(EVENTS_URL, { signal: ctrl.signal })

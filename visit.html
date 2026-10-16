@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="meander.css">
+<link rel="stylesheet" href="meander.css?v=20261015b">
 <script src="flags.js"></script>
 <script src="sheet.js"></script>
 <style>
@@ -29,13 +29,49 @@
   .faq-a a { color: var(--green-primary); text-decoration: underline; word-break: break-word; }
   .faq-links { margin-top: .5rem; font-size: .9rem; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Brewery",
+  "@id": "https://meander.benannaink.com/#brewery",
+  "name": "Meander Brewing Co.",
+  "description": "Craft brewery and taproom in historic downtown Buford, Georgia. 20+ beers on tap, kid and dog friendly, locally sourced ingredients. Est. 2024.",
+  "url": "https://meander.benannaink.com/",
+  "telephone": "+16787658133",
+  "email": "meanderbrewingco@gmail.com",
+  "foundingDate": "2024",
+  "priceRange": "$$",
+  "servesCuisine": "Craft Beer",
+  "menu": "https://meander.benannaink.com/menu.html",
+  "image": "https://meander.benannaink.com/images/hero.jpg",
+  "logo": "https://meander.benannaink.com/images/logo3.png",
+  "hasMap": "https://www.google.com/maps/search/?api=1&query=Meander+Brewing+Co+110+E+Moreno+St+Buford+GA",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "110 E. Moreno St.",
+    "addressLocality": "Buford",
+    "addressRegion": "GA",
+    "postalCode": "30518",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 34.1203,
+    "longitude": -84.0038
+  },
+  "sameAs": [
+    "https://www.instagram.com/meanderbrewingco/",
+    "https://www.facebook.com/profile.php?id=61561907513937"
+  ]
+}
+</script>
 </head>
 <body>
 
 <input type="checkbox" id="nav-toggle" aria-hidden="true">
 <header class="top">
   <div class="top-inner">
-    <a href="index.html" class="brand">Meander<span class="sub">Brewing Co.</span></a>
+    <a href="index.html" class="brand brand-has-logo" aria-label="Meander Brewing Co. home"><img src="images/logo-header.png" alt="Meander Brewing Co." class="brand-logo" width="192" height="128"></a>
     <label for="nav-toggle" class="hamburger" aria-label="Open menu">
       <span></span><span></span><span></span>
     </label>
@@ -44,17 +80,11 @@
 <div class="nav-overlay" role="dialog" aria-label="Site navigation">
   <a href="index.html" class="nav-link">Home</a>
   <a href="menu.html" class="nav-link">On Tap</a>
-  <a href="about.html" class="nav-link">About</a>
+  <a href="about.html" class="nav-link">About Us</a>
   <a href="events.html" class="nav-link">Events</a>
   <a href="photos.html" class="nav-link">Photos</a>
-  <a href="faq.html" class="nav-link">FAQ</a>
   <a href="visit.html" class="nav-link active">Visit</a>
-  <div class="nav-sub">
-    <a href="https://www.instagram.com/meanderbrewingco/">Instagram</a> ·
-    <a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a> ·
-    <a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a>
-  </div>
-  <div class="nav-address">110 E. Moreno St. · Buford, GA 30518 · (678) 765-8133</div>
+  <a href="faq.html" class="nav-link">FAQ</a>
 </div>
 
 <!-- ====== HERO BANNER ====== -->
@@ -74,13 +104,15 @@
       <div class="hours-block reveal-left">
         <h3 style="margin-top:0">Taproom Hours</h3>
         <table class="hours-table" id="hours-table">
+          <!-- BAKED:hours  do not edit by hand: tools/bake-sheets.py -->
           <tr><td>Monday</td><td class="closed">Closed</td></tr>
-          <tr><td>Tuesday</td><td class="closed">Closed</td></tr>
+          <tr><td>Tuesday</td><td>5:00 PM – 10:00 PM</td></tr>
           <tr><td>Wednesday</td><td>3:00 PM – 10:00 PM</td></tr>
           <tr><td>Thursday</td><td>3:00 PM – 10:00 PM</td></tr>
-          <tr><td>Friday</td><td>2:00 PM – 11:00 PM</td></tr>
+          <tr><td>Friday</td><td>3:00 PM – 11:00 PM</td></tr>
           <tr><td>Saturday</td><td>12:00 PM – 11:00 PM</td></tr>
-          <tr><td>Sunday</td><td>1:00 PM – 8:00 PM</td></tr>
+          <tr><td>Sunday</td><td>2:00 PM – 9:00 PM</td></tr>
+          <!-- /BAKED:hours -->
         </table>
         <p style="color: var(--text-muted); font-size: .9rem; margin-top: 1.5rem;">
           Hours may shift on holidays and for special events — check Instagram for the latest.
@@ -126,28 +158,16 @@
       </p>
     </div>
 
-    <div style="margin-top: 4rem;" class="props">
-      <div class="prop reveal stagger-1">
-        <h4>Parking</h4>
-        <p>Street parking along E. Moreno and free public lots one block east. No dedicated lot — come on foot from downtown if you can.</p>
-      </div>
-      <div class="prop reveal stagger-2">
-        <h4>Dogs Welcome</h4>
-        <p>Leashed, good-natured, water-bowl-enjoying dogs are part of the vibe in the outdoor beer garden.</p>
-      </div>
-      <div class="prop reveal stagger-3">
-        <h4>Kids Too</h4>
-        <p>Root beer on tap, a board-game shelf, and patio seating make this a full-family stop during daytime hours.</p>
-      </div>
-      <div class="prop reveal stagger-4">
-        <h4>Food</h4>
-        <p>No kitchen on site — but Italian Pie is right next door and delivers to the taproom. Outside food is always welcome too.</p>
-      </div>
-    </div>
-
-    <div id="faq-section" style="margin-top: 4.5rem; display:none;" class="reveal">
+    <div id="faq-section" style="margin-top: 4.5rem;" class="reveal">
       <h2 class="cat-header" style="justify-content:center; text-align:center;">Frequently Asked</h2>
-      <div id="faq-list" class="faq-list"></div>
+      <div id="faq-list" class="faq-list">
+        <!-- BAKED:faq  do not edit by hand: tools/bake-sheets.py -->
+        <div class="faq"><div class="faq-q">PARKING</div><div class="faq-a">We have limited parking in front of the brewery but there is a free 3 story parking deck just across the street</div></div>
+        <div class="faq"><div class="faq-q">DO YOU WELCOME DOGS?</div><div class="faq-a">Yes! We encourage you to bring your furry family members, don’t leave them at home! We have water bowls for them to stay hydrated while you do so with the brews. Dogs are also welcome inside and our outdoor patio space. We just ask they remain on leash when they come along with you to the brewery.</div></div>
+        <div class="faq"><div class="faq-q">DO YOU FILL GROWLERS?</div><div class="faq-a">Absolutely! Take us with you on your next visit! We sell 32oz branded Crowlers, but you can also bring in your own if you have one to fill!</div></div>
+        <div class="faq"><div class="faq-q">DO YOU HAVE OR OFFER FOOD?</div><div class="faq-a">While we do not offer food at Meander Brewing, we have teamed up with Italian Pie just a block away! They deliver directly to the brewery, and you can find their menus on our tables. <a href="https://italianpizzapie.com/menu" target="_blank" rel="noopener">https://italianpizzapie.com/menu</a></div></div>
+        <!-- /BAKED:faq -->
+      </div>
     </div>
   </div>
 </section>
@@ -176,7 +196,7 @@
       <h5>Explore</h5>
       <ul>
         <li><a href="menu.html">On Tap</a></li>
-        <li><a href="about.html">About</a></li>
+        <li><a href="about.html">About Us</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="photos.html">Photos</a></li>
         <li><a href="faq.html">FAQ</a></li>
@@ -218,7 +238,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var HOURS_GID = 43882215;    /* Hours tab */
   var FAQ_GID   = 1629458348;  /* FAQs tab  */
 
-  /* Hours: replace the static table on success; static rows remain a fallback */
+  /* Hours: the table is BAKED from the sheet at commit time (tools/bake-sheets.py),
+     so the first paint is already correct. This fetch only picks up edits made to
+     the sheet since the last bake; on failure the baked rows stand. */
   if (HOURS_GID != null && window.MeanderSheet) {
     MeanderSheet.fetchTab(HOURS_GID, 'Day').then(function (rows) {
       var table = document.getElementById('hours-table');
@@ -235,8 +257,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }).catch(function () { /* keep the static fallback table */ });
   }
 
-  /* FAQ: reveal + populate the section on success; stay hidden otherwise */
-  var faqSection = document.getElementById('faq-section');
+  /* FAQ: also baked, so the section renders immediately and is visible by default.
+     This fetch refreshes it; on failure the baked questions stand. */
   if (FAQ_GID != null && window.MeanderSheet) {
     MeanderSheet.fetchTab(FAQ_GID, 'Question').then(function (rows) {
       var list = document.getElementById('faq-list');
@@ -257,8 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         return '<div class="faq"><div class="faq-q">' + MeanderSheet.esc(q) + '</div><div class="faq-a">' + answerHtml + '</div></div>';
       }).join('');
-      if (faqSection) { faqSection.style.display = ''; faqSection.classList.add('visible'); }
-    }).catch(function () { /* stay hidden */ });
+    }).catch(function () { /* keep the baked questions */ });
   }
 });
 </script>

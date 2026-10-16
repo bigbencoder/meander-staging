@@ -2,7 +2,7 @@
    Same quote-safe parser the menu uses. Reads published-to-web CSV tabs by gid
    from the site's single Google Sheet. */
 (function () {
-  var SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMmfXhZFbVxJQB-KmXoxGh3ym5IgbHW7ODr_jKMS0-uRcZUby3YXtKAUA7azzXrqROWk4X_2tkOKYZ/pub?single=true&output=csv';
+  var SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT-__sJlKHc3Z7Ece8LmX5lRToq8x3G51Gass8hJN5wM9uunnJqlVtzvT201YGQ06Wn-WgTlrRWYqDi/pub?single=true&output=csv';
 
   function parseCSVLine(line) {
     var result = [], current = '', inQuotes = false;
