@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="meander.css?v=20261015b">
+<link rel="stylesheet" href="meander.css?v=20261016a">
 <script src="flags.js"></script>
 <script src="sheet.js"></script>
 <style>
@@ -267,9 +267,13 @@ document.addEventListener('DOMContentLoaded', function () {
        mis-typed Section value must not blank live copy off the page. */
     var el = document.getElementById('about-story');
     if (el && story.length) {
-      el.innerHTML = story.map(function (r, i) {
-        return '<p class="' + (i === 0 ? 'lead reveal' : 'reveal') + '">' +
-               MeanderSheet.linkify(get(r, 'Body')) + '</p>';
+      /* A Story row's Heading (if any) becomes a quote-style line above its
+         paragraph; position no longer matters (client, 2026-10-16). Must match
+         tools/bake-sheets.py render_about_story(). */
+      el.innerHTML = story.map(function (r) {
+        var head = get(r, 'Heading'), body = get(r, 'Body');
+        return (head ? '<p class="lead reveal">' + MeanderSheet.esc(head) + '</p>' : '') +
+               (body ? '<p class="reveal">' + MeanderSheet.linkify(body) + '</p>' : '');
       }).join('');
     }
 

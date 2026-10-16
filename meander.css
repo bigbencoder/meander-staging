@@ -860,8 +860,11 @@ a.cat:active { transform: translateY(-2px); }
   font-size: 1.25rem; color: var(--ink);
   font-style: italic;
   border-left: 3px solid var(--amber-bright);
-  padding-left: 1.4rem; margin-bottom: 2rem;
+  padding-left: 1.4rem; margin-bottom: 1rem;
 }
+/* Story Headings (2026-10-16): each quote line sits close to its own paragraph
+   and opens a new section with room above it. */
+.about-body .lead:not(:first-child) { margin-top: 2.6rem; }
 .owners-row {
   display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
   margin-top: 3rem;
