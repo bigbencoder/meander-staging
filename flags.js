@@ -7,13 +7,12 @@
   var PROD_HOSTS = [
     'meanderbrewingco.com',
     'www.meanderbrewingco.com',
-    // meander.benannaink.com is the CURRENT canonical production host — the real
-    // domain gets pointed here later. Without it listed, this file would noindex
-    // live production and show "Coming Soon" on its events page.
+    // The pre-launch production host. Kept so the live site never flips to
+    // "Coming Soon" + noindex in the minutes between merging the domain change
+    // and GitHub serving the new domain; after cutover it only serves redirects.
     'meander.benannaink.com'
     // ^ the hosts above are the ones that show live content and are indexable.
-    //   meanderbrewingco.com is the real customer-facing domain (launching
-    //   later); benannaink is where production lives until it is pointed here.
+    //   meanderbrewingco.com is the customer-facing domain (launched 2026-10-16).
   ];
   // The TEST site (meander-staging repo). It shows real content so changes can be
   // tested there before they are promoted to production, but it is still
