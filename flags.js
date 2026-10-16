@@ -15,11 +15,20 @@
     //   meanderbrewingco.com is the real customer-facing domain (launching
     //   later); benannaink is where production lives until it is pointed here.
   ];
+  // The TEST site (meander-staging repo). It shows real content so changes can be
+  // tested there before they are promoted to production, but it is still
+  // noindexed below and blocked by its own robots.txt (Ben, 2026-10-16).
+  var TEST_HOSTS = [
+    'meanderbeercompany.com',
+    'www.meanderbeercompany.com'
+  ];
   var isProd = PROD_HOSTS.indexOf(location.hostname) !== -1;
-  window.MEANDER_ENV = isProd ? 'prod' : 'staging';
+  var isTest = TEST_HOSTS.indexOf(location.hostname) !== -1;
+  window.MEANDER_ENV = isProd ? 'prod' : (isTest ? 'test' : 'staging');
   window.MEANDER_FLAGS = {
-    // events page shows a "Coming Soon" placeholder on every non-production host
-    eventsComingSoon: !isProd
+    // events page shows a "Coming Soon" placeholder on every host that is
+    // neither production nor the test site (*.github.io, stray copies, localhost)
+    eventsComingSoon: !isProd && !isTest
   };
 
   // SEO: keep every non-production host OUT of search results until the real
