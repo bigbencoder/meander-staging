@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Jobs · Meander Brewing Co.</title>
+<meta name="description" content="Join the Meander team. We're hiring friendly, energetic folks to serve in our Buford, GA taproom. Must be 21 or older to apply.">
+<link rel="canonical" href="https://meanderbrewingco.com/jobs.html">
+<meta property="og:title" content="Join Our Team — Meander Brewing Co.">
+<meta property="og:description" content="We're looking for friendly, energetic folks to serve drinks in our Buford taproom.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meanderbrewingco.com/jobs.html">
+<meta property="og:image" content="https://meanderbrewingco.com/images/taproom1.jpg">
+<meta property="og:site_name" content="Meander Brewing Co.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="meander.css?v=20261016b">
+<style>
+  .jobs-intro { max-width: 62ch; margin: 0 auto; text-align: center; }
+  .jobs-intro h2 { margin-bottom: 1rem; }
+  .jobs-intro p { color: var(--text-body); line-height: 1.7; margin-bottom: 1.6rem; }
+  .apply-form { max-width: 680px; margin: 0 auto; }
+  .age-note { text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--green-primary); margin: 0 0 2rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 1.25rem; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .field label { display: block; font-family: 'Oswald', sans-serif; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: .4rem; }
+  .field input, .field select, .field textarea { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: .75rem .85rem; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
+  .field textarea { min-height: 7rem; resize: vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--green-primary); outline-offset: 1px; border-color: transparent; }
+  .req { color: var(--green-primary); }
+  .check { display: flex; gap: .7rem; align-items: flex-start; margin-top: .4rem; line-height: 1.5; color: var(--text-body); }
+  .check input { width: 1.15rem; height: 1.15rem; margin-top: .2rem; flex: none; accent-color: var(--green-primary); }
+  .resume-note { font-size: .92rem; color: var(--text-muted); margin-top: .2rem; }
+  .form-actions { text-align: center; margin-top: 1.8rem; }
+  .form-actions button { cursor: pointer; border: 0; }
+  .form-status { text-align: center; margin-top: 1.2rem; min-height: 1.5em; line-height: 1.5; }
+  .form-status.ok { color: var(--green-primary); }
+  .form-status.err { color: #a33; }
+  /* honeypot: invisible to people, tempting to bots */
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+</style>
+<script src="flags.js"></script>
+</head>
+<body>
+
+<input type="checkbox" id="nav-toggle" aria-hidden="true">
+<header class="top">
+  <div class="top-inner">
+    <a href="index.html" class="brand brand-has-logo" aria-label="Meander Brewing Co. home"><img src="images/logo-header.png" alt="Meander Brewing Co." class="brand-logo" width="192" height="128"></a>
+    <label for="nav-toggle" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+</header>
+<div class="nav-overlay" role="dialog" aria-label="Site navigation">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="menu.html" class="nav-link">On Tap</a>
+  <a href="about.html" class="nav-link">About Us</a>
+  <a href="events.html" class="nav-link">Events</a>
+  <a href="photos.html" class="nav-link">Photos</a>
+  <a href="visit.html" class="nav-link">Visit</a>
+  <a href="faq.html" class="nav-link">FAQ</a>
+  <a href="jobs.html" class="nav-link active">Jobs</a>
+</div>
+
+<!-- ====== HERO BANNER ======
+     TODO: replace with a photo of the staff (requested by Meander). taproom1.jpg is a placeholder. -->
+<div class="img-break" style="min-height: 40vh; height: 40vh;">
+  <img src="images/taproom1.jpg" alt="Inside the Meander taproom">
+  <div class="img-break-overlay">
+    <div class="img-break-text">
+      <span class="eyebrow">Now Hiring</span>
+      <h1 style="font-size: clamp(2.4rem, 5vw, 4rem);">Join Our Team</h1>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="jobs-intro reveal">
+      <h2>Love craft beer and great company? Join the Meander Team!</h2>
+      <p>We’re looking for friendly, energetic folks to serve drinks in our Buford taproom. If you love local flavor, thrive in a bustling, community-first space, and want to help us serve everything from crisp lagers to juicy IPAs, we want to hear from you.</p>
+      <a href="#apply" class="btn filled">Apply Now &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section id="apply" style="background: var(--section-alt);">
+  <div class="wrap">
+    <p class="age-note">Must be age 21 or older to apply</p>
+    <form class="apply-form" id="apply-form" novalidate>
+      <div class="hp" aria-hidden="true">
+        <label for="company_website">Leave this field empty</label>
+        <input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off">
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="first_name">First Name <span class="req">*</span></label>
+          <input type="text" id="first_name" name="first_name" autocomplete="given-name" maxlength="80" required>
+        </div>
+        <div class="field">
+          <label for="last_name">Last Name <span class="req">*</span></label>
+          <input type="text" id="last_name" name="last_name" autocomplete="family-name" maxlength="80" required>
+        </div>
+        <div class="field">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" maxlength="160" required>
+        </div>
+        <div class="field">
+          <label for="cell">Cell # <span class="req">*</span></label>
+          <input type="tel" id="cell" name="cell" autocomplete="tel" maxlength="30" required>
+        </div>
+        <div class="field full">
+          <label for="experience">Serving Experience</label>
+          <textarea id="experience" name="experience" maxlength="1500" placeholder="Where you've served or bartended, and for how long"></textarea>
+        </div>
+        <div class="field">
+          <label for="shifts">How many shifts per week/month</label>
+          <input type="text" id="shifts" name="shifts" maxlength="80" placeholder="e.g. 3 per week">
+        </div>
+        <div class="field">
+          <label for="day_night">Day/Night</label>
+          <select id="day_night" name="day_night">
+            <option value="">Choose one</option>
+            <option>Days</option>
+            <option>Nights</option>
+            <option>Either</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="start_date">Date available to start</label>
+          <input type="date" id="start_date" name="start_date">
+        </div>
+        <div class="field full">
+          <label class="check"><input type="checkbox" id="age21" name="age21" value="yes" required> <span>I am 21 years of age or older. <span class="req">*</span></span></label>
+          <p class="resume-note">Have a resume? No need to attach it here — we’ll ask for it by email if we’d like to see it.</p>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn filled" id="apply-submit">Submit Application</button>
+      </div>
+      <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="brand">Meander<span class="sub">Brewing Co.</span></div>
+      <p style="color: rgba(255,255,255,.6); font-size: .92rem; margin-top: 1rem; max-width: 36ch;">
+        110 E. Moreno St., Buford, GA 30518<br>
+        (678) 765-8133
+      </p>
+    </div>
+    <div class="foot-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="menu.html">On Tap</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="visit.html">Visit</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="jobs.html">Jobs</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="https://www.instagram.com/meanderbrewingco/">Instagram</a></li>
+        <li><a href="https://www.facebook.com/p/Meander-Brewing-Co-61561907513937/">Facebook</a></li>
+        <li><a href="https://untappd.com/v/meander-brewing-company/12385595">Untappd</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <span>&copy; 2026 Meander Brewing Co. · Buford, GA</span>
+    <span>Please drink responsibly. Must be 21+.</span>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .img-break').forEach(el => obs.observe(el));
+  const header = document.querySelector('.top');
+  window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+  document.querySelectorAll('.nav-overlay .nav-link').forEach(link => {
+    link.addEventListener('click', () => { document.getElementById('nav-toggle').checked = false; });
+  });
+});
+</script>
+
+<script>
+/* === Job application form ===
+   JOBS_ENDPOINT is where submissions are sent. It is deliberately EMPTY until the email backend is chosen
+   (a form service, or our own endpoint), so the form cannot silently drop or leak an application:
+   with no endpoint it validates, then says plainly that it is not connected yet. */
+var JOBS_ENDPOINT = '';
+
+document.addEventListener('DOMContentLoaded', function () {
+  var form = document.getElementById('apply-form');
+  var status = document.getElementById('form-status');
+  var btn = document.getElementById('apply-submit');
+  function say(msg, cls) { status.textContent = msg; status.className = 'form-status ' + (cls || ''); }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      var bad = form.querySelector(':invalid');
+      if (bad && bad.id === 'age21') say('Please confirm you are 21 or older.', 'err');
+      else say('Please fill in the required fields (marked *).', 'err');
+      if (bad) bad.focus();
+      return;
+    }
+    if (form.company_website.value) { say('Thanks! Your application was sent.', 'ok'); form.reset(); return; } /* bot: drop quietly */
+    if (!JOBS_ENDPOINT) { say('This form isn’t connected yet (staging preview). Nothing was sent.', 'err'); return; }
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) { if (k !== 'company_website') data[k] = String(v).trim(); });
+    btn.disabled = true; say('Sending…');
+    fetch(JOBS_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); say('Thanks! Your application was sent. We’ll be in touch.', 'ok'); form.reset(); })
+      .catch(function () { say('Sorry — that didn’t go through. Please try again, or call us at (678) 765-8133.', 'err'); })
+      .then(function () { btn.disabled = false; });
+  });
+});
+</script>
+
+</body>
+</html>
