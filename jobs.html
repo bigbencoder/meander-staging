@@ -200,10 +200,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script>
 /* === Job application form ===
-   JOBS_ENDPOINT is where submissions are sent. It is deliberately EMPTY until the email backend is chosen
+   JOBS_ENDPOINT is where submissions are sent: the meander-forms service (webMasterDev/scripts/meander-forms),
+   which routes by Origin (this staging domain -> Ben's test inbox; production -> the brewery). It was EMPTY until the email backend was chosen
    (a form service, or our own endpoint), so the form cannot silently drop or leak an application:
    with no endpoint it validates, then says plainly that it is not connected yet. */
-var JOBS_ENDPOINT = '';
+var JOBS_ENDPOINT = 'https://forms.benannaink.com/api/meander/jobs';
 
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('apply-form');
