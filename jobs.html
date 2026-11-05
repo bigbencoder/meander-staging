@@ -42,6 +42,10 @@
   /* honeypot: invisible to people, tempting to bots */
   .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+  /* iOS Safari sizes date inputs to their own content, ignoring width: 100%, and a 1fr grid column won't shrink
+     below it, so the field pushed the page sideways on phones. Let the cells shrink and flatten the date input. */
+  .form-grid > .field { min-width: 0; }
+  .field input[type="date"] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; min-height: 3rem; text-align: left; }
 </style>
 <script src="flags.js"></script>
 </head>
